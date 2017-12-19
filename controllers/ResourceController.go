@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"fmt"
-	"sdrms/enums"
-	"sdrms/models"
 	"strconv"
 	"strings"
+
+	"github.com/lhtzbj12/sdrms/enums"
+	"github.com/lhtzbj12/sdrms/models"
 
 	"github.com/astaxie/beego/orm"
 )

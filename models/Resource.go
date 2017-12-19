@@ -2,7 +2,8 @@ package models
 
 import (
 	"fmt"
-	"sdrms/utils"
+
+	"github.com/lhtzbj12/sdrms/utils"
 
 	"github.com/astaxie/beego/orm"
 )

@@ -1,6 +1,6 @@
 package models
 
-import "sdrms/enums"
+import "github.com/lhtzbj12/sdrms/enums"
 
 type JsonResult struct {
 	Code enums.JsonResultCode `json:"code"`

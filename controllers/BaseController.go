@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"sdrms/enums"
-	"sdrms/models"
-	"sdrms/utils"
+	"github.com/lhtzbj12/sdrms/enums"
+	"github.com/lhtzbj12/sdrms/models"
+	"github.com/lhtzbj12/sdrms/utils"
 
 	"github.com/astaxie/beego"
 )

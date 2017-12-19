@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "sdrms/routers"
-	_ "sdrms/sysinit"
+	_ "github.com/lhtzbj12/sdrms/routers"
+	_ "github.com/lhtzbj12/sdrms/sysinit"
 
 	"github.com/astaxie/beego"
 )
