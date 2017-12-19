@@ -1,0 +1,84 @@
+@charset "utf-8";
+/*!
+ * Copyright (C) Corporation. All rights reserved.
+ *
+ * Author      :  lihaitao
+ * Email        : lhtzbj12@126.com
+ * Create Date  : 2017-11-28
+ * Description  : 整合时对框架自己定义的样式
+ * Version      : V0.0.2
+ *
+ * Revision History:
+ *      Date         Author               Description
+ *      2017-11-28   lihaitao               create
+ *
+*/
+
+.searchForm{
+  .box-tools{
+    margin-top: 8px;
+  }
+  input{
+    margin-right: 5px;
+  }
+  .input-wd-lg{
+    width: 300px;
+  }
+  .input-wd-md{
+    width: 200px;
+  }
+  .input-wd-sm{
+    width: 100px;
+  }
+
+}
+.form-group{
+  .fileinput{
+    width: 100%;
+    .btn-file{
+      background: #e1e5ec;
+      &:hover{
+        background: #cccccc;
+      }
+    }
+    .thumbnail img{
+      max-width: 240px;
+      max-height: 164px;
+    }
+  }
+}
+.highlight{
+  background-color: #00c0ef !important;
+  font-weight: bold;
+}
+.fixed-table-pagination {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.fixed-table-toolbar{
+  margin-top: -10px;
+}
+.align-left{
+  text-align: left;
+}
+.align-right{
+  text-align: right;
+}
+.align-center{
+  text-align: center;
+}
+
+@for $i from 0 through 5 {
+  .margin-top-#{$i*5}{
+    margin-top:$i*5px;
+  }
+  .margin-bottom-#{$i*5}{
+    margin-bottom:$i*5px;
+  }
+  .padding-top-#{$i*5}{
+    padding-top-:$i*5px;
+  }
+  .padding-bottom-#{$i*5}{
+    padding-bottom:$i*5px;
+  }
+}

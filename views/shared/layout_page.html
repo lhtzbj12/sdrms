@@ -1,0 +1,225 @@
+<!-- 用于列表页 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>{{.pageTitle}}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"> 
+    {{template "shared/globalcss.html"}} 
+    {{.headcssjs}}
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <!-- Logo -->
+            <a href="index2.html" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>R</b>MS</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>SD</b>RMS</span>
+            </a>
+
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <li class="dropdown messages-menu">
+                            <!-- Menu toggle button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success">4</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">您有 4 条新消息</li>
+                                <li>
+                                    <!-- inner menu: contains the messages -->
+                                    <ul class="menu">
+                                        <li>
+                                            <!-- start message -->
+                                            <a href="#">
+                                                <div class="pull-left">
+                                                    <!-- User Image -->
+                                                    <img src="/static/upload/1.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <!-- Message title and timestamp -->
+                                                <h4>
+                                                    技术组
+                                                    <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                                </h4>
+                                                <!-- The message -->
+                                                <p>目前没有实质功能，留作将来扩展</p>
+                                            </a>
+                                        </li>
+                                        <!-- end message -->
+                                    </ul>
+                                    <!-- /.menu -->
+                                </li>
+                                <li class="footer"><a href="#">查看所有</a></li>
+                            </ul>
+                        </li>
+                        <!-- /.messages-menu -->
+
+                        <!-- Notifications Menu -->
+                        <li class="dropdown notifications-menu">
+                            <!-- Menu toggle button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning">10</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">您有 10 条公告</li>
+                                <li>
+                                    <!-- Inner Menu: contains the notifications -->
+                                    <ul class="menu">
+                                        <li>
+                                            <!-- start notification -->
+                                            <a href="#">
+                                                <i class="fa fa-users text-aqua"></i> 
+                                                目前没有实质功能，留作将来扩展
+                                            </a>
+                                        </li>
+                                        <!-- end notification -->
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="#">查看所有</a></li>
+                            </ul>
+                        </li>
+                        <!-- Tasks Menu -->
+                        <li class="dropdown tasks-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-flag-o"></i>
+                                <span class="label label-danger">9</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">您有 9 项任务</li>
+                                <li>
+                                    <!-- Inner menu: contains the tasks -->
+                                    <ul class="menu">
+                                        <li>
+                                            <!-- Task item -->
+                                            <a href="#">
+                                                <!-- Task title and progress text -->
+                                                <h3>
+                                                    当前进度（没有实质功能，留作将来扩展）
+                                                    <small class="pull-right">20%</small>
+                                                </h3>
+                                                <!-- The progress bar -->
+                                                <div class="progress xs">
+                                                    <!-- Change the css width attribute to simulate progress -->
+                                                    <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="sr-only">20%</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <!-- end task item -->
+                                    </ul>
+                                </li>
+                                <li class="footer">
+                                    <a href="#">查看所有任务</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- The user image in the navbar-->
+                                <img src="{{.backenduser.Avatar}}" class="user-image" alt="User Image">
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <span class="hidden-xs">{{.backenduser.RealName}}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- The user image in the menu -->
+                                <li class="user-header">
+                                    <img src="{{.backenduser.Avatar}}" class="img-circle" alt="User Image">
+
+                                    <p>
+                                        高级开发工程师                                       
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <!--<li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Followers</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Sales</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Friends</a>
+                                        </div>
+                                    </div>                                   
+                                </li>-->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="{{urlfor "UserCenterController.Profile" }}" class="btn btn-default btn-flat"> 个人信息</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="{{urlfor "HomeController.Logout" }}" class="btn btn-default btn-flat"> 退  出</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            {{ template "shared/sidebar.html" }}
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            {{.LayoutContent}}
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                lhtzbj12@126.com
+            </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2016 <a href="#">SDRMS权限管理系统</a>.</strong>
+        </footer>
+        {{ template "shared/control-sidebar.html" }}
+    </div>
+    <!-- ./wrapper -->
+    {{template "shared/globaljs.html"}}
+    <script>
+        $(function () {
+           //页面左侧菜单初始化
+           rms.pageSidebarInit({
+                slideBarBox:'#pageSidebar',                         //菜单容器
+                url:'{{urlfor "ResourceController.UserMenuTree"}}', //菜单数据地址
+                cur:'{{.activeSidebarUrl}}'             //当前激活的菜单地址
+           });
+        });
+    </script>
+    {{.footerjs}}
+</body>
+
+</html>

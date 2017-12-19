@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cxCalendar 日期选择器 &raquo; 在线演示 - 前端开发仓库</title>
+<link rel="stylesheet" href="css/jquery.cxcalendar.css">
+<style>
+body{background:#ddd;font:14px/1.7 tahoma,'\5fae\8f6f\96c5\9ed1',sans-serif;}
+h1,h2,h3{font-size:36px;line-height:1;}
+h2{font-size:24px;}
+h3{font-size:18px;}
+fieldset{margin:2em 0;}
+fieldset legend{font-weight:bold;font-size:16px;line-height:2;}
+input,select,button{padding:0.5em;}
+a{color:#06f;text-decoration:none;}
+a:hover{color:#00f;}
+
+.wrap{width:800px;margin:0 auto;padding:20px 40px;border-radius:8px;background:#fff;box-shadow:0 0 10px rgba(0,0,0,0.5);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>jQuery cxCalendar 日期选择器</h1>
+
+  <h2>示例</h2>
+  <fieldset>
+    <legend>默认</legend>
+    <label for="date_a">选择日期：</label>
+    <input id="date_a" name="mydate" type="text" readonly>
+  </fieldset>
+  
+  <fieldset>
+    <legend>在 &lt;input&gt; 的 value 中设置默认值</legend>
+    <label for="date_b">选择日期：</label>
+    <input id="date_b" type="text" value="1988-1-31" readonly>
+  </fieldset>
+  
+  <fieldset>
+    <legend>在参数中设置默认日期</legend>
+    <label for="date_c">选择日期：</label>
+    <input id="date_c" type="text" value="" readonly>
+  </fieldset>
+
+  <fieldset>
+    <legend>选择日期和时间</legend>
+    <label for="date_d">选择日期：</label>
+    <input id="date_d" name="mydate" type="text" readonly>
+  </fieldset>
+
+  <fieldset>
+    <legend>自定义节假日</legend>
+    <label for="date_e">选择日期：</label>
+    <input id="date_e" name="mydate" type="text" readonly>
+  </fieldset>
+
+  <p><a target="_blank" href="http://code.ciaoca.com/jquery/cxCalendar/demo/">查看更多示例</a></p>
+
+  <h2>文档</h2>
+  <ul>
+    <li><a target="_blank" href="https://github.com/ciaoca/cxCalendar">Github</a></li>
+    <li><a target="_blank" href="http://code.ciaoca.com/jquery/cxcalendar/">中文文档</a></li>
+  </ul>
+  
+  <h2>作者</h2>
+  <p><a target="_blank" href="http://ciaoca.com/">http://ciaoca.com/</a></p>
+  <p>Released under the MIT license</p>
+</div>
+
+<script src="http://cdn.staticfile.org/jquery/2.1.1-rc2/jquery.min.js"></script>
+<script src="js/jquery.cxcalendar.min.js"></script>
+<script src="js/jquery.cxcalendar.languages.js"></script>
+<script>
+// 默认
+$('#date_a').cxCalendar();
+
+// 在 value 中有默认值
+$('#date_b').cxCalendar();
+
+// 在参数中设置默认日期
+$('#date_c').cxCalendar({
+  date: '1988/1/31'
+});
+
+// 选择日期和时间
+$('#date_d').cxCalendar({
+  type: 'datetime',
+  format: 'YYYY-MM-DD HH:mm:ss'
+});
+
+// 自定义节假日
+$('#date_e').cxCalendar({
+  baseClass: 'cxcalendar_holyday'
+});
+</script>
+</body>
+</html>

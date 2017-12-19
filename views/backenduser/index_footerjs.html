@@ -1,0 +1,228 @@
+<!-- 表格插件 -->
+<script src="/static/plugins/bootstrap-table/bootstrap-table.js" type="text/javascript"></script>
+<script src="/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js" type="text/javascript"></script>
+<script src="/static/plugins/bootstrap-table/cookie/bootstrap-table-cookie.js"></script>
+<script>
+    var $dataGrid = $('#dataGrid');
+    var $searchForm = $("#searchForm")
+    //高亮显示id
+    var highlightPk = 99;
+    //初始化加载
+    $(function () {
+        pageInit();
+    });
+
+    //初始化页面
+    function pageInit() {
+        //从cookie加载查询条件，传入参数为form id
+        sdtheme.loadSearchText('searchForm');
+        //初始化表格
+        dataGridInit();
+        //搜索
+        $("#btnSearch").on("click", function (e) {
+            refreshToFirstPage();
+        });
+        //清除搜索
+        $("#btnClearSearch").on("click", function (e) {
+            $('select', $searchForm).selectpicker('val', '');
+            $('input', $searchForm).val('');
+            refreshToFirstPage();
+        });
+        //绑定加载成功的事件，成功后高亮显示当前项
+        $dataGrid.on('load-success.bs.table', function () {
+            if (highlightPk !== null && typeof highlightPk !== 'undefined') {
+                sdtheme.highlight($dataGrid.find('tbody tr[data-pk="' + highlightPk + '"]'));
+            }
+            //高亮显示一次后失效
+            highlightPk = null;
+        });
+        //保持搜索条件面板状态
+        sdtheme.searchPanelStatusInit('searchpanelbtn');
+    };
+
+    //刷新当前页
+    function refresh(pk) {
+        $dataGrid.bootstrapTable('refresh');
+        highlightPk = pk;
+    }
+
+    //刷新并跳转至第一页
+    function refreshToFirstPage() {
+        //表格刷新时，保存查询条件到cookie
+        sdtheme.saveSearchText('searchForm');
+        //刷新并跳转至第1页
+        $dataGrid.bootstrapTable('refresh', {pageNumber: 1});
+        //同时要更新cookie里保存当前页码
+        $.cookie('dataGrid.bs.table.pageNumber', 1, {expires: 1});
+    }
+
+    //bootstrap table data init
+    function dataGridInit() {
+        $dataGrid.bootstrapTable({
+            url: '{{ urlfor "BackendUserController.DataGrid"}}',
+            method: 'post',
+            sidePagination: 'server', //服务器端用 server
+            idField: 'Id',
+            queryParamsType: 'limit',
+            queryParams: function (params) {
+                //params的自带参数类型由queryParamsType决定
+                params.UserNameLike =$.trim($('.searchForm input[name="UserName"]').val());
+                params.RealNameLike = $.trim($('.searchForm input[name="RealName"]').val());
+                params.Mobile = $.trim($('.searchForm input[name="Mobile"]').val());
+                params.SearchStatus = $('.searchForm select[name="Status"]').selectpicker('val');           
+                return params;
+            },
+            pagination: true,
+            showRefresh: true,
+            showColumns: true,
+            toolbar: '#toolbar',
+            pageSize: 10,
+            pageList: [5, 10, 20, 100, 200],
+            paginationShowPageGo: true,//20170812 lht 扩展select跳转
+            paginationUseBSSelect: true,//20170812 lht 扩展select跳转 启用BoostrapSelect(页面须引用botstrap-select.min.js)
+            cookie: true,
+            classes: 'table table-bordered table-hover',
+            undefinedText: '',
+            sortName: 'Id',
+            sortOrder: 'desc',
+            rowAttributes: function (row, index) {
+                return {'data-pk': row.Id}
+            },
+            columns: [{
+                field: 'state',
+                checkbox: true,
+                radio: false,
+            }, {
+                field: 'Id',
+                title: 'ID',
+                width: '90px',
+                align: 'center',
+                sortable: true,
+            }, {
+                field: 'UserName',
+                title: '用户名',                     
+            }, {
+                field: 'RealName',
+                title: '姓名',                     
+            }, {
+                field: 'IsSuper',
+                title: '是否超级管理员',
+                formatter: sdtheme.showyes                     
+            }, {
+                field: 'Mobile',
+                title: '手机号',                     
+            }, {
+                field: 'Status',
+                title: '状态',   
+                formatter:sdtheme.showenable,                  
+            }, {
+                field: 'operate',
+                title: '操作',              
+                width: '100px',
+                formatter: function (value, row, index) {
+                    var ret = [];
+                    if ('{{.canEdit}}' === 'true') {
+                        ret.push('<button class="btn btn-primary btn-xs"  onclick="EditFun(' + row.Id + ')"><i class="fa fa-pencil"></i> 编辑</button>');
+                    }
+                    return ret.join('');
+                }
+            }],
+            onLoadSuccess: function (data) {
+                layer.closeAll('loading');
+                //
+                //CheboxUniform()
+            },
+            onSort: function (name, order) {
+                //alert('name:' + name + " order:" + order);
+            },
+            onPageChange: function () {
+                //layer.load();
+            },
+            onCheckAll: function (rows) {
+                //禁用删除需要勾选才能用的按钮
+                $(".table-btn-check-enable").removeAttr('disabled');
+            },
+            onCheck: function (rows) {
+                //禁用删除需要勾选才能用的按钮
+                $(".table-btn-check-enable").removeAttr('disabled');
+            },
+            onUncheck: function (rows) {
+                //禁用删除需要勾选才能用的按钮
+                if ($("#dataGrid").bootstrapTable("getSelections").length === 0) {
+                    $(".table-btn-check-enable").attr('disabled', 'disabled');
+                }
+            }, onUncheckAll: function () {
+                //禁用删除需要勾选才能用的按钮
+                if ($("#dataGrid").bootstrapTable("getSelections").length === 0) {
+                    $(".table-btn-check-enable").attr('disabled', 'disabled');
+                }
+            },
+            onLoadError: function (status) {
+                layer.alert('获取数据失败,错误代码：' + status);
+            }
+        });
+    }
+    function GetStatusText(value) {
+        var texts = [{ Text: '锁定', Value: -1 }, { Text: '禁用', Value: 0 }, { Text: '启用', Value: 1 } ]
+        return sdtheme.showenum(value, texts);
+    }    
+
+    ///用一个带有title值的span将值包裹起来
+    function formatterWapBySpan(value, row, index) {
+        if (value !== null) {
+            return '<span title="' + value + '">' + value + '</span>';
+        }
+        return "";
+    }
+
+    function EditFun(Id) {
+        var title = '添加用户';
+        if (Id > 0) {
+            title = "编辑用户"
+        }
+        var url = '{{ urlfor "BackendUserController.Edit"}}' + '/' + Id;
+        layer.open({
+            type: 2,
+            title: title,
+            shadeClose: false,
+            shade: 0.2,
+            maxmin: true,
+            shift: 1,
+            area: ['1000px', '600px'],
+            content: url,
+            btn: ['保存', '关闭'],
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.FormSubmit();
+            }
+        });
+    }
+
+    function DeleteFun() {
+        var url = '{{ urlfor "BackendUserController.Delete"}}';
+        var rows = $dataGrid.bootstrapTable("getSelections")
+        if (rows.length === 0) {
+            layer.alert('请选择想要删除的项', {icon: 0, title: '提示'});
+            return;
+        }
+        var ids = [];
+        $(rows).each(function (i, e) {
+            ids.push(e.Id);
+        });
+        layer.confirm('您是否要删除所选的项？', {
+            btn: ['是', '否'], icon: 3, title: '请确认'
+        }, function () {
+            console.log(ids)
+            var dataValues = {ids:ids.join(',')};
+            $.sdpost(url, dataValues, function (re) {
+                if (re.code == 0) {
+                    layer.msg(re.msg, {icon: 1, title: '成功'});
+                    refresh();
+                } else {
+                    layer.alert(re.msg, {icon: 2, title: "失败"});
+                }
+            });
+        });
+    }
+
+</script>

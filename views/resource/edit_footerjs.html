@@ -1,0 +1,141 @@
+<!-- 验证插件 -->
+<script src="/static/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="/static/plugins/jquery-validation/localization/messages_zh.min.js"></script>
+<!-- 针对当前主题进行简单封装，精简代码 -->
+<script src="/static/sdtheme/scripts/sdvalidate.js"></script>
+<script>
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    $(function () {
+        pageInit();        
+    })
+    function pageInit() {        
+        //父节点下拉初始化
+        ParentSelectInit('{{.parent}}');
+        //附值
+        $("#Rtype").selectpicker('val','{{.m.Rtype}}');  
+        //验证
+        validateInfo();
+    }
+    function ParentSelectInit(curPid){
+        var url = '{{urlfor "ResourceController.ParentTreeGrid"}}'
+        $.sdpost(url, { id: $("#Id").val() }, function (re) {
+            if (re.code === 0) {
+                var html = ['<option value="0">- 无 -</option>']
+                var $select = $("#Parent");
+                $select.html('')
+                $(re.obj).each(function (i, e) {
+                    //下拉菜单里只显示区域和菜单
+                    if(e.Rtype >1){
+                        return true
+                    }
+                    var str = new Array(e.Level * 4).join("&nbsp;");
+                    if (e.Level > 0)
+                        str = str + "|-";
+                    html.push('<option value="' + e.Id + '"');
+                    if (e.HtmlDisabled == 1) {
+                        html.push('disabled');
+                    }
+                    html.push('>' + str + e.Name + '</option>')
+                });
+                $select.html(html.join(''));
+                $select.selectpicker();
+                $select.selectpicker('val',curPid);
+            } else {
+                parent.layer.alert("获取资源树失败", { icon: 2, title: '失败' })
+            }
+        });
+    }
+    //区域只能是一级节点，不能有父节点
+    jQuery.validator.methods.RtypeCheck = function (value, element, param) {
+        //如果为空，直接过
+        if (value.length == 0) return true;
+        var p = $("#Parent").selectpicker('val')
+        if (value === "0" && p!="0"){
+            return false
+        }
+        return true
+    }
+    //当UrlFor不为空时，UrlLink也不能为空，UrlLink是根据路由自动生成
+    jQuery.validator.methods.UrlLinkCheck = function (value, element, param) {
+        //如果为空，直接过
+        var $ctrUrlFor=$("#UrlFor");
+        var urlfor = $.trim($ctrUrlFor.val());
+        if (urlfor.length == 0){
+            return true;   
+        }  else{
+            var retval = false;
+            var url='{{urlfor "ResourceController.CheckUrlFor"}}'
+            $.sdpost(url,{urlfor:urlfor},function(re){
+                if(re.code === 0){
+                    $("#LinkUrl").val(re.obj);
+                    retval = true;
+                }else{
+                    $("#LinkUrl").val('');
+                }
+            },false)            
+            return retval
+        }
+    }
+    //表单验证及AJAX提交
+    function validateInfo() {
+        var $thisForm = $('#thisForm');
+        $thisForm.sdvalidate({
+            rules: {
+                Name: {
+                    maxlength: 32,
+                    required: true
+                },
+                Icon: {
+                    maxlength: 32,                   
+                },
+                Seq: {
+                    digits:true,
+                    max: 999999,
+                    required: true
+                },
+                Rtype:{
+                    required: true,
+                    RtypeCheck:true
+                },
+                LinkUrl:{
+                    UrlLinkCheck:true
+                }
+            },
+            messages: {
+                Rtype:{                   
+                    RtypeCheck:"区域只能是一级节点，不能有父节点"
+                },
+                LinkUrl:{
+                    UrlLinkCheck:"您输入的UrlFor值并不能解析为有效的地址"
+                }
+            },
+            submitHandler: function (form) {
+                var url = '{{ urlfor "ResourceController.Edit"}}'
+                var data = $thisForm.serialize();
+                $.sdpost(url, data, function (re) {
+                    if (re.code === 0) {
+                        parent.layer.msg(re.msg)
+                        //刷新，并将所编辑的节点展开
+                        parent.refresh(re.obj,true)
+                        parent.layer.close(index)
+                    } else {
+                        parent.layer.alert(re.msg, { icon: 2, title: '失败' })
+                    }
+                });
+                return false;
+            }
+        });
+    }
+    function chkUrlFor(){
+        $("#LinkUrl").valid();
+    }
+    function urlForChange(ctrl){
+        var v = $.trim($(ctrl).val()).replace(/，| /g,",")
+        $(ctrl).val(v)
+        chkUrlFor();
+    }
+    function FormSubmit() {
+        $("#thisForm").submit();
+    }
+
+</script>

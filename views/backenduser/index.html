@@ -1,0 +1,71 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        后台用户管理
+        <small>管理后台用户</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{urlfor "HomeController.Index"}}">
+                <i class="fa fa-dashboard"></i> 首页</a>
+        </li>
+        <li class="active">后台用户</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content container-fluid">
+    <!-- 页面内容开始 -->
+    <div class="row">
+        <div class="col-md-12">           
+            <form id="searchForm" class="searchForm">
+                <div class="box box-solid collapsed-box">
+                    <div class="box-header with-border">                     
+                        <input type="text" name="UserName" class="form-control pull-left input-wd-md" placeholder="用户名">
+                        <input type="text" name="RealName" class="form-control pull-left input-wd-md" placeholder="姓名">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-warning" id="btnSearch"><i class="fa fa-search"></i> 搜索</button>
+                            <button type="button" class="btn btn-default" id="btnClearSearch"><i class="fa fa-eraser"></i> 清除</button>
+                        </div>
+						{{if .showMoreQuery }}
+                        <div class="box-tools pull-right">
+                            <button id="searchpanelbtn" type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                                </button>
+                        </div>
+						{{end}}
+                        <!-- /.box-tools -->
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body" style="display: none;">
+                        <input type="text" name="Mobile" class="form-control pull-left input-wd-md" placeholder="手机号">
+                        <select name="Status" class="form-control bs-select" data-width="100px">
+                            <option value="">- 全部 -</option>
+                            <option value="-1">锁定</option>
+                            <option value="0">禁用</option>
+                            <option value="1">启用</option>
+                        </select>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </form>
+            <!-- /.searchForm -->
+            <div class="box box-solid">
+                <div class="box-body">
+                    <div class="btn-group" id="toolbar">
+                        {{ if .canEdit}}
+                        <button class="btn btn-info" href="javascript:;" onclick="EditFun(0)">
+                            <i class="fa fa-plus"></i> 添加</button>   
+                        {{end}}  
+                        {{ if .canDelete}}                
+                        <button class="btn btn-danger table-btn-check-enable" disabled onclick="DeleteFun()">
+                                    <i class="fa fa-trash"></i> 删除
+                                </button>
+                        {{end}}  
+                    </div>
+                    <table id="dataGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 页面内容结束 -->
+</section>
+<!-- /.content -->

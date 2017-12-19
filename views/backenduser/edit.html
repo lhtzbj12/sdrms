@@ -1,0 +1,67 @@
+<form id="thisForm">
+    <input type="hidden" name="Id" id="Id" value="{{.m.Id}}">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" name="UserName" class="form-control" placeholder="长度不超过24" value="{{.m.UserName}}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>姓名</label>
+                <input type="text" name="RealName" class="form-control" placeholder="长度不超过16" value="{{.m.RealName}}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>手机号</label>
+                <input type="text" name="Mobile" class="form-control" placeholder="" value="{{.m.Mobile}}">
+            </div>
+        </div> 
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>邮箱</label>
+                <input type="text" name="Email" class="form-control" placeholder="" value="{{.m.Email}}">
+            </div>
+        </div>       
+    </div>      
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>是否超级管理员</label>
+                <select name="IsSuper" id="IsSuper" class="form-control bs-select">
+                    <option value="false">否</option>
+                    <option value="true">是</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>状态</label>
+                <select name="Status" id="Status" class="form-control bs-select">                   
+                    <option value="0">禁用</option>
+                    <option value="1">启用</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>密码</label>
+                <input type="text" name="UserPwd" class="form-control" placeholder="留空则不修改">
+            </div>
+        </div> 
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>角色</label>
+                <select name="RoleIds" id="Roles" class="form-control" multiple>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+</div>

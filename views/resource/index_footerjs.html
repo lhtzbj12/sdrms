@@ -1,0 +1,185 @@
+<!-- treetable插件 -->
+<script src="/static/plugins/jquery-treetable/js/jquery.treetable.js"></script>
+<!-- x-editable插件 -->
+<script src="/static/plugins/x-editable/js/bootstrap-editable.min.js"></script>
+
+<script>
+    var $treeGrid = $("#treeGrid");
+    //高亮显示id
+    var highlightPk = 0;
+    //初始化加载
+    $(function () {
+        pageInit();
+    });
+    //初始化页面
+    function pageInit() {
+        //初始化树形表格
+        dataGridInit();
+    }
+    //初始化树形表格
+    function dataGridInit(doreveal) {
+        //从服务器端获取数据
+        var url = '{{ urlfor "ResourceController.TreeGrid"}}'
+        $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {
+                //拼接表格               
+                fillTable(re.obj)
+                //treetable插件初始化
+                treeGridInit();
+                //高亮显示
+                highlight(highlightPk, doreveal);
+                //初始化快速编辑顺序
+                EditableInit(true);
+            } else {
+                layer.alert("数据获取失败", { icon: 2, title: '错误' })
+            }
+        });
+    }
+    //刷新，pk需要高亮的主键，doreveal是否展开节点
+    function refresh(pk, doreveal) {
+        highlightPk = pk;
+        //保存当前页面滚动条位置
+        var scrollTop = $(window).scrollTop();
+        dataGridInit(doreveal);
+        //滚动到当前位置
+        $(window).scrollTop(scrollTop);
+    }
+    //将数据拼接到表格中 
+    function fillTable(data) {
+        $('tbody', $treeGrid).html('');
+        $treeGrid.treetable('destroy');
+        var html = [];
+        $(data).each(function (i, e) {
+            var parentid = 0
+            if (e.Parent) {
+                parentid = e.Parent.Id
+            }
+            html.push('<tr data-tt-id="' + e.Id + '" data-tt-parent-id="' + parentid + '" data-SonNum="'+e.SonNum+'">');
+            html.push('<td class="ellipsis" title="' + e.Name + '">' + e.Name + '</td>');
+            html.push('<td class="align-center">');
+            if (e.Icon && e.Icon.length > 0) {
+                html.push('<label class="label label-primary"><i class="' + e.Icon + '"></i></label>')
+            }
+            html.push('</td>');
+            html.push('<td class="align-center">' + GetRtypeText(e.Rtype) + '</td>');
+            html.push('<td class="ellipsis" title="' + e.LinkUrl + '">' + e.LinkUrl + '</td>');
+            html.push('<td class="align-center" ><a href="javascript:;" class="editable-weight" data-pk="' + e.Id + '" data-name="Seq">' + e.Seq + '</a></td>');
+            html.push('<td>');
+            html.push('  <div class="btn-group">');
+            if ('{{.canEdit}}' === 'true') {
+                html.push('    <button class="btn btn-primary btn-xs" onclick="EditFun(' + e.Id + ')"><i class="fa fa-pencil"></i> 编辑</button>');
+            }
+            //if (e.SonNum === 0) {
+            if ('{{.canDelete}}' === 'true') {
+                html.push('    <button class="btn btn-danger btn-xs" onclick="DeleteFun(' + e.Id + ')"><i class="fa fa-trash"></i> 删除</button>');
+            }
+            //}
+            html.push('  </div>');
+            html.push('</td>');
+            html.push('</tr>');
+        });
+        $('tbody', $treeGrid).html(html.join(''));
+    }
+    function treeGridInit() {
+        //加载,初始化
+        $treeGrid.treetable({
+            expandable: true,
+            clickableNodeNames: false,           
+            onNodeCollapse: function () {
+                //保存展开的节点id到cookie
+                sdtheme.saveExpandStatus('treeGrid');
+            },
+            onNodeExpand: function () {
+                //保存展开的节点id到cookie
+                sdtheme.saveExpandStatus('treeGrid');
+            },
+        });
+        //从cookie里读取展开的节点id数据并使用
+        sdtheme.loadExpandStatus('treeGrid');
+        /*$treeGrid.colResizable({
+            liveDrag: true,
+            gripInnerHtml: "<div class='grip'></div>",
+            draggingClass: "dragging",
+            resizeMode: 'fit',d
+            minWidth: 40,
+        });*/      
+        //全部展开
+        $(".treegridexpend").off('click').on('click', function () {
+            $($(this).attr('data-target')).treetable('expandAll');
+        });
+        //全部收缩
+        $(".treegridcollapse").off('click').on('click', function () {
+            $($(this).attr('data-target')).treetable('collapseAll');
+        });
+    }
+    function highlight(highlightPk, doreveal) {
+        //高亮显示节点
+        if (highlightPk !== null && typeof highlightPk !== 'undefined') {
+            if (doreveal && doreveal === true) {
+                //把当前节点显示出来
+                $treeGrid.treetable('reveal', highlightPk);
+            }
+            //调用高亮显示
+            sdtheme.highlight($treeGrid.find('tr[data-tt-id="' + highlightPk + '"]'));
+            //高亮一次后清除
+            highlightPk = null;
+        }
+    }
+    function GetRtypeText(value) {
+        var texts = [{ Text: '区域', Value: 0 }, { Text: '菜单', Value: 1 }, { Text: '按钮', Value: 2 } ]
+        return sdtheme.showenum(value, texts);
+    } 
+    //初始化顺序可编辑
+    function EditableInit(doEdit) {
+            if (doEdit === false) return;
+            $('.editable-weight', $treeGrid).editable(rms.getEditableParam('{{urlfor "ResourceController.UpdateSeq"}}', null, true));
+    }
+    function EditFun(Id) {
+        var title = '添加资源';
+        if (Id > 0) {
+            title = "编辑资源"
+        }
+        var url = '{{ urlfor "ResourceController.Edit"}}' + '/' + Id;
+        layer.open({
+            type: 2,
+            title: title,
+            shadeClose: false,
+            shade: 0.2,
+            maxmin: true,
+            shift: 1,
+            area: ['1000px', '600px'],
+            content: url,
+            btn: ['保存', '关闭'],
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.FormSubmit();
+            }
+        });
+    } 
+    function DeleteFun(Id) {
+        var url = '{{ urlfor "ResourceController.Delete"}}';          
+        //找到节点
+        var node =$treeGrid.find('tr[data-tt-id="' + Id + '"]');
+        if(node.length == 0){
+            layer.alert('请选择想要删除的项',{icon:0,title:'提示'})
+        }
+        var waring = '您是否要删除所选的项？';
+        var sonNum = node.attr('data-SonNUm');        
+        if(sonNum!="0"){
+            waring ='您想要的删除的节点包含子节点，将一起被删除，是否继续？';
+        }
+        layer.confirm(waring, {
+            btn: ['是', '否'], icon: 3, title: '请确认'
+        }, function () {            
+            var dataValues = {Id:Id};
+            $.sdpost(url, dataValues, function (re) {
+                if (re.code == 0) {
+                    layer.msg(re.msg, {icon: 1, title: '成功'});
+                    refresh();
+                } else {
+                    layer.alert(re.msg, {icon: 2, title: "失败"});
+                }
+            });
+        });
+    }  
+</script>

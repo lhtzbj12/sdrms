@@ -1,0 +1,114 @@
+<!-- treetable插件 -->
+<script src="/static/plugins/jquery-treetable/js/jquery.treetable.js"></script>
+<script>
+    var $treeGrid = $("#treeGrid");
+    //初始化加载
+    $(function () {
+        pageInit();        
+    });
+    //初始化页面
+    function pageInit() {
+        dataGridInit();
+    }   
+    //初始化树形表格
+    function dataGridInit() {
+        //从服务器端获取数据
+        var url = '{{ urlfor "ResourceController.TreeGrid"}}'
+        $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {
+                //拼接表格               
+                fillTable(re.obj)
+                //treetable插件初始化
+                treeGridInit();              
+            } else {
+                layer.alert("数据获取失败", { icon: 2, title: '错误' })
+            }
+        });
+    }  
+    //将数据拼接到表格中 
+    function fillTable(data) {
+        $('tbody', $treeGrid).html('');
+        $treeGrid.treetable('destroy');
+        var html = [];
+        $(data).each(function (i, e) {
+            var parentid = 0
+            if (e.Parent) {
+                parentid = e.Parent.Id
+            }
+            html.push('<tr data-tt-id="' + e.Id + '" data-tt-parent-id="' + parentid + '" data-SonNum="'+e.SonNum+'">');
+            html.push('<td class="align-center">');
+            if ('0' === "0") {
+                html.push('<input type="checkbox"  ');
+            } else {
+                html.push('<input type="radio" ');
+            }
+            html.push(' name="Id" class="chkSingle" value="' + e.Id + '"');
+            if (setSelection(e.Id) ) {
+                html.push(' checked="checked" ');
+            }           
+            html.push('  />');
+            html.push("</td>");
+
+            html.push('<td class="ellipsis" title="' + e.Name + '">' + e.Name + '</td>');
+            html.push('<td class="align-center">');
+            if (e.Icon && e.Icon.length > 0) {
+                html.push('<label class="label label-success"><i class="' + e.Icon + '"></i></label>')
+            }
+            html.push('</td>');
+            html.push('<td class="align-center">' +GetRtypeText(e.Rtype) + '</td>');
+            html.push('<td class="ellipsis" title="' + e.LinkUrl + '">' + e.LinkUrl + '</td>');
+            html.push('</tr>');
+        });
+        $('tbody', $treeGrid).html(html.join(''));
+    }
+    function GetRtypeText(value) {
+        var texts = [{ Text: '区域', Value: 0 }, { Text: '菜单', Value: 1 }, { Text: '按钮', Value: 2 } ]
+        return sdtheme.showenum(value, texts);
+    } 
+    //获取选择项
+    function getSelections() {
+        var ids = []
+        $("tbody :checked", $treeGrid).each(function (i, e) {
+            ids.push($(e).val());
+        });
+        return ids;
+    }    
+    function setSelection(Id) {
+        var check = false;
+        var selectedIds='{{.selectedIds}}'
+        var ids = selectedIds.split(',');      
+        $.each(ids, function (i, e) {
+            if (e == Id) {
+                check = true;
+            }
+        })
+        return check;
+    }
+    function treeGridInit() {
+        //加载,初始化
+        $treeGrid.treetable({
+            expandable: true,
+            clickableNodeNames: false,
+            column: 1,//在第2列单元格形成树结构
+            onNodeCollapse: function () {
+                //保存展开的节点id到cookie
+                sdtheme.saveExpandStatus('treeGrid');
+            },
+            onNodeExpand: function () {
+                //保存展开的节点id到cookie
+                sdtheme.saveExpandStatus('treeGrid');
+            },
+        });
+        //从cookie里读取展开的节点id数据并使用
+        sdtheme.loadExpandStatus('treeGrid');      
+        //全选 单选初始化
+        rms.chkAllSingleInit("#treeGrid .chkAll", "#treeGrid .chkSingle");
+        //
+        $(".treegridexpend").off('click').on('click', function () {
+            $($(this).attr('data-target')).treetable('expandAll');
+        });
+        $(".treegridcollapse").off('click').on('click', function () {
+            $($(this).attr('data-target')).treetable('collapseAll');
+        });
+    }    
+</script>

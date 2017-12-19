@@ -1,0 +1,127 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        个人信息
+        <small>修改我的头像、联系方式</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{urlfor "HomeController.Index"}}">
+            <i class="fa fa-dashboard"></i> 首页</a>
+        </li>
+        <li class="active">个人信息</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content container-fluid">
+    <!-- 页面内容开始 -->
+    <div class="row">
+        <div class="col-md-7">
+            <form id="thisForm">
+                <div class="box box-solid">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">基本信息</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <input type="hidden" name="Id" value="{{.m.Id}}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group margin-bottom-0">
+                                    <div class="fileinput {{if .hasAvatar}}fileinput-exists{{else}}fileinput-new{{end}} display-block" data-provides="fileinput">
+                                        <div class="fileinput-new thumbnail">
+                                            <img src="/static/sdtheme/img/no-image.png" alt="">
+                                        </div>
+                                        <div class="fileinput-preview fileinput-exists thumbnail">
+                                            <img src="{{.m.Avatar}}">
+                                        </div>
+                                        <div>
+                                            <span class="btn btn-file">
+                                                <span class="fileinput-new"> 选择图片 </span>
+                                                <span class="fileinput-exists"> 更换 </span>
+                                                <input name="fileImageUrl" id="inputImageUrl" type="file">
+                                            </span>
+                                            <a href="javascript:;" class="btn btn-danger fileinput-exists" data-dismiss="fileinput"> 移除 </a>
+                                        </div>
+                                    </div>
+                                    <input name="ImageUrl" id="ImageUrl" type="hidden" value="{{.m.Avatar}}">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>用户名</label>
+                                            <input type="text" name="UserName" class="form-control" placeholder="长度不超过24" value="{{.m.UserName}}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>姓名</label>
+                                            <input type="text" name="RealName" class="form-control" placeholder="长度不超过16" value="{{.m.RealName}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>手机号</label>
+                                            <input type="text" name="Mobile" class="form-control" placeholder="" value="{{.m.Mobile}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>邮箱</label>
+                                            <input type="text" name="Email" class="form-control" placeholder="" value="{{.m.Email}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer align-right">
+                        <button type="submit" class="btn btn-primary">保 存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-5">
+            <form id="pwdForm">
+                <div class="box box-solid">
+                    <input type="hidden" name="Id" value="{{.m.Id}}">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">密码</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>原密码</label>
+                            <input type="password" name="UserPwd" class="form-control" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>新密码</label>
+                            <input type="password" id="NewUserPwd" name="NewUserPwd" class="form-control" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>确认密码</label>
+                            <input type="password" name="ConfirmPwd" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="box-footer align-right">
+                        <button type="submit" class="btn btn-primary">保 存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

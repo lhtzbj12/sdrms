@@ -1,0 +1,18 @@
+<div class="row">
+    <!-- form start -->
+    <form class="form-horizontal" id="thisForm">
+        <input type="hidden" Name="Id" id="Id" value="{{.m.Id}}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">角色名称</label>
+            <div class="col-sm-8">
+                <input type="text" name="Name" class="form-control" placeholder="字母汉字" value="{{.m.Name}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">顺序</label>
+            <div class="col-sm-8">
+                <input type="text" name="Seq" class="form-control" placeholder="非负整数" value="{{.m.Seq}}">
+            </div>
+        </div>
+    </form>
+</div>

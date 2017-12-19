@@ -1,0 +1,21 @@
+<!-- 用弹出层 -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"> 
+    <meta name="renderer" content="webkit">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>{{.pageTitle}}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	{{template "shared/globalcss.html"}}
+	{{.headcssjs}}
+</head>
+<body>
+<section class="content container-fluid">
+{{.LayoutContent}}
+</section>
+{{template "shared/globaljs.html"}}
+{{.footerjs}}
+</body>
+</html>

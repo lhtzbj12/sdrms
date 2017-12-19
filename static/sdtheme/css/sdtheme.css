@@ -1,0 +1,129 @@
+@charset "UTF-8";
+/*!
+ * Copyright (C) Corporation. All rights reserved.
+ *
+ * Author      :  lihaitao
+ * Email        : lhtzbj12@126.com
+ * Create Date  : 2017-11-28
+ * Description  : 整合时对框架自己定义的样式
+ * Version      : V0.0.2
+ *
+ * Revision History:
+ *      Date         Author               Description
+ *      2017-11-28   lihaitao               create
+ *
+*/
+.searchForm .box-tools {
+  margin-top: 8px; }
+.searchForm input {
+  margin-right: 5px; }
+.searchForm .input-wd-lg {
+  width: 300px; }
+.searchForm .input-wd-md {
+  width: 200px; }
+.searchForm .input-wd-sm {
+  width: 100px; }
+
+.form-group .fileinput {
+  width: 100%; }
+  .form-group .fileinput .btn-file {
+    background: #e1e5ec; }
+    .form-group .fileinput .btn-file:hover {
+      background: #cccccc; }
+  .form-group .fileinput .thumbnail img {
+    max-width: 240px;
+    max-height: 164px; }
+
+.highlight {
+  background-color: #00c0ef !important;
+  font-weight: bold; }
+
+.fixed-table-pagination {
+  padding-left: 10px;
+  padding-right: 10px; }
+
+.fixed-table-toolbar {
+  margin-top: -10px; }
+
+.align-left {
+  text-align: left; }
+
+.align-right {
+  text-align: right; }
+
+.align-center {
+  text-align: center; }
+
+.margin-top-0 {
+  margin-top: 0px; }
+
+.margin-bottom-0 {
+  margin-bottom: 0px; }
+
+.padding-top-0 {
+  padding-top-: 0px; }
+
+.padding-bottom-0 {
+  padding-bottom: 0px; }
+
+.margin-top-5 {
+  margin-top: 5px; }
+
+.margin-bottom-5 {
+  margin-bottom: 5px; }
+
+.padding-top-5 {
+  padding-top-: 5px; }
+
+.padding-bottom-5 {
+  padding-bottom: 5px; }
+
+.margin-top-10 {
+  margin-top: 10px; }
+
+.margin-bottom-10 {
+  margin-bottom: 10px; }
+
+.padding-top-10 {
+  padding-top-: 10px; }
+
+.padding-bottom-10 {
+  padding-bottom: 10px; }
+
+.margin-top-15 {
+  margin-top: 15px; }
+
+.margin-bottom-15 {
+  margin-bottom: 15px; }
+
+.padding-top-15 {
+  padding-top-: 15px; }
+
+.padding-bottom-15 {
+  padding-bottom: 15px; }
+
+.margin-top-20 {
+  margin-top: 20px; }
+
+.margin-bottom-20 {
+  margin-bottom: 20px; }
+
+.padding-top-20 {
+  padding-top-: 20px; }
+
+.padding-bottom-20 {
+  padding-bottom: 20px; }
+
+.margin-top-25 {
+  margin-top: 25px; }
+
+.margin-bottom-25 {
+  margin-bottom: 25px; }
+
+.padding-top-25 {
+  padding-top-: 25px; }
+
+.padding-bottom-25 {
+  padding-bottom: 25px; }
+
+/*# sourceMappingURL=sdtheme.css.map */

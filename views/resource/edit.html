@@ -1,0 +1,67 @@
+<form id="thisForm">
+    <input type="hidden" name="Id" id="Id" value="{{.m.Id}}">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>名称</label>
+                <input type="text" name="Name" class="form-control" placeholder="长度不超过32" value="{{.m.Name}}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>父节点</label>
+                <select name="Parent" id="Parent" class="form-control">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>类型</label>
+                <select name="Rtype" id="Rtype" class="form-control bs-select">
+                    <option value="0">区域</option>
+                    <option value="1">菜单</option>
+                    <option value="2">按钮</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>图标</label>
+                <input type="text" name="Icon" class="form-control" placeholder="长度不超过32" value="{{.m.Icon}}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>UrlFor(参考Beego的
+                    <a href="https://beego.me/docs/mvc/controller/urlbuilding.md" target="_blank">Url构建</a>不需要双引号)</label>
+                <input type="text" id="UrlFor" name="UrlFor" class="form-control" placeholder="如：BackendUserController.Edit,:id,1" 
+                value="{{.m.UrlFor}}" onchange="urlForChange(this)">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>顺序</label>
+                <input type="text" name="Seq" class="form-control" placeholder="非负整数" value="{{.m.Seq}}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>由UrlFor的值经过路由规则处理后的地址</label>
+                <div class="input-group">
+                    <input type="text" id="LinkUrl" name="LinkUrl" class="form-control" placeholder="点击 验证 在这里显示UrlFor验证后的结果" value="{{.m.LinkUrl}}"
+                        readonly>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-flat" type="button" onclick="chkUrlFor()">验证</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
