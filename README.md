@@ -45,7 +45,7 @@ go get github.com/lhtzbj12/sdrms
 ```
 bee run
 ```
-在浏览器里打开 http://localhost:8080进行访问
+在浏览器里打开 http://localhost:8080 进行访问
 
 # 系统截图
 
