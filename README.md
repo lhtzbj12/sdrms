@@ -41,7 +41,9 @@ go get github.com/go-sql-driver/mysql
 ```
 go get github.com/lhtzbj12/sdrms
 ```
-5.运行 
+5.将根目录下的sdrms.sql导入mysql
+
+6.运行
 在 sdrms 目录使用beego官方提供的命令运行
 ```
 bee run
