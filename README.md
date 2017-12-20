@@ -29,21 +29,15 @@ http://blog.csdn.net/lhtzbj12/article/details/78847482
 本系统基于beego开发，默认使用mysql数据库，缓存redis 
 1. 安装golang环境（ 略）
 
-2.安装beego
-```
-go get github.com/astaxie/beego
-```
-3.安装mysql驱动
-```
-go get github.com/go-sql-driver/mysql
-```
-4.安装本系统
+2.安装本系统
 ```
 go get github.com/lhtzbj12/sdrms
 ```
-5.将根目录下的sdrms.sql导入mysql
+3.将根目录下的sdrms.sql导入mysql
 
-6.运行
+4.修改配置文件 conf/app.conf
+
+5.运行
 在 sdrms 目录使用beego官方提供的命令运行
 ```
 bee run
