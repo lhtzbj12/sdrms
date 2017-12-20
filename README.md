@@ -35,7 +35,7 @@ go get github.com/astaxie/beego
 ```
 3.安装mysql驱动
 ```
-go get github.com/mattn/go-sqlite3
+go get github.com/go-sql-driver/mysql
 ```
 4.安装本系统
 ```
