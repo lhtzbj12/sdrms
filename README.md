@@ -54,3 +54,13 @@ bee run
 ![这里写图片描述](http://img.blog.csdn.net/20171219222006504?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 ![这里写图片描述](http://img.blog.csdn.net/20171219222019726?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 ![这里写图片描述](http://img.blog.csdn.net/20171219222029838?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+# 补充说明
+ beego升级到v1.10.1后，启动本项目时报错
+ ```
+ cannot find package "github.com/gomodule/redigo/redis"
+ ```
+ 解决方法很简单，只需要在终端运行下面命令，下载需要的包即可
+ ```
+ go get github.com/gomodule/redigo/redis
+ ```
