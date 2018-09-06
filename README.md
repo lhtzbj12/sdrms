@@ -27,6 +27,8 @@ http://blog.csdn.net/lhtzbj12/article/details/78847482
 # 安装方法
 
 本系统基于beego开发，默认使用mysql数据库，缓存redis 
+
+
 1.安装golang环境（ 略）
 
 2.安装本系统
