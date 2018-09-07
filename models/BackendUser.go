@@ -4,10 +4,12 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+// TableName 设置BackendUser表名
 func (a *BackendUser) TableName() string {
 	return BackendUserTBName()
 }
 
+// BackendUserQueryParam 用于查询的类
 type BackendUserQueryParam struct {
 	BaseQueryParam
 	UserNameLike string //模糊查询
@@ -15,6 +17,8 @@ type BackendUserQueryParam struct {
 	Mobile       string //精确查询
 	SearchStatus string //为空不查询，有值精确查询
 }
+
+// BackendUser 实体类
 type BackendUser struct {
 	Id                 int
 	RealName           string `orm:"size(32)"`
@@ -30,7 +34,7 @@ type BackendUser struct {
 	ResourceUrlForList []string              `orm:"-"`
 }
 
-//获取分页数据
+// BackendUserPageList 获取分页数据
 func BackendUserPageList(params *BackendUserQueryParam) ([]*BackendUser, int64) {
 	query := orm.NewOrm().QueryTable(BackendUserTBName())
 	data := make([]*BackendUser, 0)
@@ -56,7 +60,7 @@ func BackendUserPageList(params *BackendUserQueryParam) ([]*BackendUser, int64) 
 	return data, total
 }
 
-// 根据id获取单条
+// BackendUserOne 根据id获取单条
 func BackendUserOne(id int) (*BackendUser, error) {
 	o := orm.NewOrm()
 	m := BackendUser{Id: id}
@@ -67,7 +71,7 @@ func BackendUserOne(id int) (*BackendUser, error) {
 	return &m, nil
 }
 
-// 根据用户名密码获取单条
+// BackendUserOneByUserName 根据用户名密码获取单条
 func BackendUserOneByUserName(username, userpwd string) (*BackendUser, error) {
 	m := BackendUser{}
 	err := orm.NewOrm().QueryTable(BackendUserTBName()).Filter("username", username).Filter("userpwd", userpwd).One(&m)

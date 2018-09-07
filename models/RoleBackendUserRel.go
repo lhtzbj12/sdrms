@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-//角色与用户关系
+// RoleBackendUserRel 角色与用户关系
 type RoleBackendUserRel struct {
 	Id          int
 	Role        *Role        `orm:"rel(fk)"`  //外键
@@ -10,6 +10,7 @@ type RoleBackendUserRel struct {
 	Created     time.Time    `orm:"auto_now_add;type(datetime)"`
 }
 
+// TableName 设置表名
 func (a *RoleBackendUserRel) TableName() string {
 	return RoleBackendUserRelTBName()
 }

@@ -67,8 +67,13 @@ var sdtheme = function () {
     }
 
     //从cookie加载查询条件
-    function loadSearchText(formId) {
-        var serialize = $.cookie('formmaitain_' + formId);
+    //默认存入cookie的key由formId而，可以使用extKey进一步区分
+    //callback用于，加载完数据后，做更多事件，比如处理级联的下拉框
+    function loadSearchText(formId, extKey, callback) {
+        if(!extKey){
+            extKey = ''
+        }
+        var serialize = $.cookie('formmaitain_' + formId + extKey);
         if (serialize) {
             serialize = serialize.replace(/\+/g, ' ');
             //整理name 和 值，
@@ -96,27 +101,39 @@ var sdtheme = function () {
                     }
                 }
             }
+            if(callback){
+                callback(namevals)
+            }
         }
     }
     //将查询条件存入cookie
-    function saveSearchText(formId) {
+    function saveSearchText(formId , extKey) {
+        if(!extKey){
+            extKey = ''
+        }
         //将查询表单的值存在cookie
-        $.cookie('formmaitain_' + formId, decodeURIComponent($("#" + formId).serialize(), true), { expires: 1 });
+        $.cookie('formmaitain_' + formId + extKey, decodeURIComponent($("#" + formId).serialize(), true), { expires: 1 });
     }
-    //treetable
-    function saveExpandStatus(treeGridId) {
+     //treetable
+     function saveExpandStatus(treeGridId, extKey) {
+        if(!extKey){
+            extKey = ''
+        }
         //获取所有展开的节点的id
         var ids = [];
         var $expandeds = $("#" + treeGridId).find('tr.expanded');
         $expandeds.each(function (i, e) {
             ids.push($(e).attr('data-tt-id'));
         });
-        $.cookie(treeGridId + '_expandedids', ids.join(','), { expires: 1 });
+        $.cookie(treeGridId + '_expandedids' + extKey, ids.join(','), { expires: 1 });
     }
     //treetable
-    function loadExpandStatus(treeGridId) {
+    function loadExpandStatus(treeGridId, extKey) {
+        if(!extKey){
+            extKey = ''
+        }
         //获取所有展开的节点的id
-        var ids = $.cookie(treeGridId + '_expandedids');
+        var ids = $.cookie(treeGridId + '_expandedids' + extKey);
         if (ids !== null && typeof ids !== 'undefined' && ids.length > 0) {
             $(ids.split(',')).each(function (i, e) {
                 //先判断节点是否存在
@@ -159,7 +176,10 @@ var sdtheme = function () {
         spark();
     }
     //初始化搜索条件面板状态保持功能
-    function searchPanelStatusInit(btnid) {
+    function searchPanelStatusInit(btnid, hidetips, extKey) {
+        if(!extKey){
+            extKey = ''
+        }
         var $btn = $('#' + btnid);
         if ($btn.length > 0) {
             var $icon = $('i',$btn)
@@ -171,10 +191,10 @@ var sdtheme = function () {
                 if ($icon.hasClass('fa-plus')) {
                     css = 'fa-minus';
                 }
-                $.cookie('SearchPanelStatus' + btnid, css, { expires: 1 });
+                $.cookie('SearchPanelStatus' + btnid + extKey, css, { expires: 1 });
             });
             //页面加载时，加载状态
-            var css = $.cookie('SearchPanelStatus' + btnid);
+            var css = $.cookie('SearchPanelStatus' + btnid + extKey);
             if (css != null && typeof css !== 'undefined') {
                 if (css === 'fa-minus') {
                     $icon.removeClass('fa-plus').addClass('fa-minus')
@@ -182,14 +202,16 @@ var sdtheme = function () {
                     $btn.closest('div.box-header').next().show()
                 }
             }
-            //只要面板处于关闭
-            if($icon.hasClass('fa-plus')){
-                //重点提示更多条件
-                layer.tips('显示/隐藏更多查询条件', '#' + btnid, {
-                    tips: [1, '#35AA47'],
-                    time: 5000,
-                    shift: 6
-                });
+            if(!hidetips || hidetips===false){
+                //只要面板处于关闭
+                if($icon.hasClass('fa-plus')){
+                    //重点提示更多条件
+                    layer.tips('显示/隐藏更多查询条件', '#' + btnid, {
+                        tips: [1, '#35AA47'],
+                        time: 5000,
+                        shift: 6
+                    });
+                }
             }
         }
     }
@@ -220,6 +242,53 @@ var sdtheme = function () {
             parent.layer.alert("请求失败", { icon: 2, title: '错误' });
         }
     }
+    //开始和结束时间级联
+    function timeCtrlBeginToEnd(beginselector,endselector,ctrtype,format){
+        if(!ctrtype) {
+            ctrtype = 'datetime'
+        }
+        if (!format) {
+            format = 'YYYY/MM/DD HH:mm:ss'
+        }
+        //时间范围控制
+        var dateFirst = $(beginselector);
+        var dateEnd = $(endselector);
+        var dateFirstApi = null;
+        var dateEndApi = null;
+        var EndTimeInit = function () {
+            //获取开始时间
+            var startTime = parseInt(dateFirstApi.getDate('TIME'), 10);
+            //获取开始时间的日期
+            var startTimeDate = dateFirstApi.getDate('YYYY/MM/DD');
+            var endTime = parseInt(dateEndApi.getDate('TIME'), 10);
+            if (endTime < startTime) {
+                dateEndApi.clearDate();
+            };
+            dateEndApi.setOptions({
+                //startDate: startTime //这种方式会导致日期加1
+                startDate: startTimeDate
+            });
+            dateEndApi.show();
+        }
+        dateFirst.bind('change', function () {
+            EndTimeInit();
+        }).cxCalendar(function (api) {
+            dateFirstApi = api;
+            dateFirstApi.setOptions({
+                type: ctrtype,
+                format: format
+            });
+        });
+        dateEnd.bind('click', function () {
+            EndTimeInit();
+        }).cxCalendar(function (api) {
+            dateEndApi = api;
+            dateEndApi.setOptions({
+                type: ctrtype,
+                format: format
+            });
+        });
+    }
     return {
         //
         init:init,
@@ -247,11 +316,14 @@ var sdtheme = function () {
         highlight: highlight,
         //初始化搜索条件面板状态保持功能
         searchPanelStatusInit: searchPanelStatusInit,
-        //
+        //将滚动条位置存入cookie
         saveScrollTop2Cookie: saveScrollTop2Cookie,
-        //
+        //加载滚动条位置
         loadScrollTopFromCookie: loadScrollTopFromCookie,
-        alertXHRError:alertXHRError
+        //提示错误
+        alertXHRError:alertXHRError,
+        //时间区间初始化
+        timeCtrlBeginToEnd:timeCtrlBeginToEnd
     };
     //控件美化
     function uniform() {

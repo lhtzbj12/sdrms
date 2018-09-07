@@ -8,11 +8,12 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+// TableName 设置表名
 func (a *Resource) TableName() string {
 	return ResourceTBName()
 }
 
-//Resource 权限控制资源表
+// Resource 权限控制资源表
 type Resource struct {
 	Id              int
 	Name            string    `orm:"size(64)"`
@@ -29,6 +30,7 @@ type Resource struct {
 	RoleResourceRel []*RoleResourceRel `orm:"reverse(many)"` // 设置一对多的反向关系
 }
 
+// ResourceOne 获取单条
 func ResourceOne(id int) (*Resource, error) {
 	o := orm.NewOrm()
 	m := Resource{Id: id}
@@ -39,7 +41,7 @@ func ResourceOne(id int) (*Resource, error) {
 	return &m, nil
 }
 
-//Resource 获取treegrid顺序的列表
+// ResourceTreeGrid 获取treegrid顺序的列表
 func ResourceTreeGrid() []*Resource {
 	o := orm.NewOrm()
 	query := o.QueryTable(ResourceTBName()).OrderBy("seq", "id")
@@ -48,7 +50,7 @@ func ResourceTreeGrid() []*Resource {
 	return resourceList2TreeGrid(list)
 }
 
-//ResourceTreeGrid4Parent 获取可以成为某个节点父节点的列表
+// ResourceTreeGrid4Parent 获取可以成为某个节点父节点的列表
 func ResourceTreeGrid4Parent(id int) []*Resource {
 	tree := ResourceTreeGrid()
 	if id == 0 {
@@ -77,7 +79,7 @@ func ResourceTreeGrid4Parent(id int) []*Resource {
 	return tree
 }
 
-//根据用户获取有权管理的资源列表，并整理成teegrid格式
+// ResourceTreeGridByUserId 根据用户获取有权管理的资源列表，并整理成teegrid格式
 func ResourceTreeGridByUserId(backuserid, maxrtype int) []*Resource {
 	cachekey := fmt.Sprintf("rms_ResourceTreeGridByUserId_%v_%v", backuserid, maxrtype)
 	var list []*Resource
@@ -108,7 +110,7 @@ func ResourceTreeGridByUserId(backuserid, maxrtype int) []*Resource {
 	return result
 }
 
-//将资源列表转成treegrid格式
+// resourceList2TreeGrid 将资源列表转成treegrid格式
 func resourceList2TreeGrid(list []*Resource) []*Resource {
 	result := make([]*Resource, 0)
 	for _, item := range list {

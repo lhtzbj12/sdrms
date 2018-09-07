@@ -4,16 +4,18 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+// TableName 设置表名
 func (a *Role) TableName() string {
 	return RoleTBName()
 }
 
+// RoleQueryParam 用于搜索的类
 type RoleQueryParam struct {
 	BaseQueryParam
 	NameLike string
 }
 
-//用户角色
+// Role 用户角色 实体类
 type Role struct {
 	Id                 int    `form:"Id"`
 	Name               string `form:"Name"`
@@ -22,7 +24,7 @@ type Role struct {
 	RoleBackendUserRel []*RoleBackendUserRel `orm:"reverse(many)" json:"-"` // 设置一对多的反向关系
 }
 
-//获取分页数据
+// RolePageList 获取分页数据
 func RolePageList(params *RoleQueryParam) ([]*Role, int64) {
 	query := orm.NewOrm().QueryTable(RoleTBName())
 	data := make([]*Role, 0)
@@ -43,7 +45,7 @@ func RolePageList(params *RoleQueryParam) ([]*Role, int64) {
 	return data, total
 }
 
-//获取角色列表
+// RoleDataList 获取角色列表
 func RoleDataList(params *RoleQueryParam) []*Role {
 	params.Limit = -1
 	params.Sort = "Seq"
@@ -52,12 +54,14 @@ func RoleDataList(params *RoleQueryParam) []*Role {
 	return data
 }
 
-//批量删除
+// RoleBatchDelete 批量删除
 func RoleBatchDelete(ids []int) (int64, error) {
 	query := orm.NewOrm().QueryTable(RoleTBName())
 	num, err := query.Filter("id__in", ids).Delete()
 	return num, err
 }
+
+// RoleOne 获取单条
 func RoleOne(id int) (*Role, error) {
 	o := orm.NewOrm()
 	m := Role{Id: id}
