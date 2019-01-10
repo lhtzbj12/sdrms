@@ -259,7 +259,7 @@ var sdtheme = function () {
             //获取开始时间
             var startTime = parseInt(dateFirstApi.getDate('TIME'), 10);
             //获取开始时间的日期
-            var startTimeDate = dateFirstApi.getDate(format);
+            var startTimeDate = dateFirstApi.getDate('YYYY/MM/DD');
             var endTime = parseInt(dateEndApi.getDate('TIME'), 10);
             if (endTime < startTime) {
                 dateEndApi.clearDate();
