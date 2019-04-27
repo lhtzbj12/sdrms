@@ -75,7 +75,7 @@ func (c *RoleController) Edit() {
 		c.Save()
 	}
 	Id, _ := c.GetInt(":id", 0)
-	m := models.Role{Id: Id}
+	m := models.Role{Id: Id, Seq: 100}
 	if Id > 0 {
 		o := orm.NewOrm()
 		err := o.Read(&m)

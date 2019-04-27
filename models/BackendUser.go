@@ -32,6 +32,7 @@ type BackendUser struct {
 	RoleIds            []int                 `orm:"-" form:"RoleIds"`
 	RoleBackendUserRel []*RoleBackendUserRel `orm:"reverse(many)"` // 设置一对多的反向关系
 	ResourceUrlForList []string              `orm:"-"`
+	//CreateCourses      []*Course             `rom:"reverse(many)"` // 设置一对多的反向关系
 }
 
 // BackendUserPageList 获取分页数据

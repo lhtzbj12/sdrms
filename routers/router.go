@@ -7,6 +7,14 @@ import (
 )
 
 func init() {
+
+	//课程路由
+	beego.Router("/course/index", &controllers.CourseController{}, "*:Index")
+	beego.Router("/course/datagrid", &controllers.CourseController{}, "Get,Post:DataGrid")
+	beego.Router("/course/edit/?:id", &controllers.CourseController{}, "Get,Post:Edit")
+	beego.Router("/course/delete", &controllers.CourseController{}, "Post:Delete")
+	beego.Router("/course/updateseq", &controllers.CourseController{}, "Post:UpdateSeq")
+
 	//用户角色路由
 	beego.Router("/role/index", &controllers.RoleController{}, "*:Index")
 	beego.Router("/role/datagrid", &controllers.RoleController{}, "Get,Post:DataGrid")
