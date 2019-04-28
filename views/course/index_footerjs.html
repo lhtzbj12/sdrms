@@ -11,7 +11,7 @@
     var $dataGrid = $('#dataGrid');
     var $searchForm = $("#searchForm")
     //高亮显示id
-    var highlightPk = null ;
+    var highlightPk = sdtheme.getQueryString('highlightPk') ;
     //初始化加载
     $(function () {
         pageInit();
@@ -108,6 +108,12 @@
                     return { classes: 'ellipsis' };
                 }
             }, {
+                field: 'StartTime',
+                title: '有效期',            
+                formatter: function(value, row, index, field){
+                  return row.StartTime + ' - ' + row.EndTime
+                }
+            }, {
                 field: 'Seq',
                 title: '顺序',
                 width: '100px',
@@ -178,21 +184,7 @@
             title = "编辑课程"
         }
         var url = '{{ urlfor "CourseController.Edit"}}' + '/' + Id;
-        layer.open({
-            type: 2,
-            title: title,
-            shadeClose: false,
-            shade: 0.2,
-            maxmin: true,
-            shift: 1,
-            area: ['800px', '400px'],
-            content: url,
-            btn: ['保存', '关闭'],
-            yes: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.FormSubmit();
-            }
-        });
+        window.location.href = url        
     }
 
     function DeleteFun() {

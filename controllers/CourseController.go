@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/lhtzbj12/sdrms/enums"
 	"github.com/lhtzbj12/sdrms/models"
@@ -66,7 +67,7 @@ func (c *CourseController) Edit() {
 		c.Save()
 	}
 	Id, _ := c.GetInt(":id", 0)
-	m := models.Course{Id: Id, Seq: 100}
+	m := models.Course{Id: Id, Seq: 100, StartTime: time.Now(), EndTime: time.Now()}
 	if Id > 0 {
 		o := orm.NewOrm()
 		err := o.Read(&m)
@@ -75,9 +76,13 @@ func (c *CourseController) Edit() {
 		}
 	}
 	c.Data["m"] = m
-	c.setTpl("course/edit.html", "shared/layout_pullbox.html")
+	c.setTpl("course/edit.html", "shared/layout_page.html")
 	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["headcssjs"] = "course/edit_headcssjs.html"
 	c.LayoutSections["footerjs"] = "course/edit_footerjs.html"
+
+	//将页面左边菜单的某项激活
+	c.Data["activeSidebarUrl"] = c.URLFor("CourseController.Index")
 }
 
 //Save 添加、编辑页面 保存
@@ -86,7 +91,7 @@ func (c *CourseController) Save() {
 	m := models.Course{}
 	//获取form里的值
 	if err = c.ParseForm(&m); err != nil {
-		c.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
+		c.jsonResult(enums.JRCodeFailed, "提交表单数据失败，可能原因："+err.Error(), m.Id)
 	}
 	o := orm.NewOrm()
 	if m.Id == 0 {
@@ -94,7 +99,7 @@ func (c *CourseController) Save() {
 		if _, err = o.Insert(&m); err == nil {
 			c.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
 		} else {
-			c.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			c.jsonResult(enums.JRCodeFailed, "添加失败，可能原因："+err.Error(), m.Id)
 		}
 
 	} else {

@@ -3,9 +3,19 @@
 <script src="/static/plugins/jquery-validation/localization/messages_zh.min.js"></script>
 <!-- 针对当前主题进行简单封装，精简代码 -->
 <script src="/static/sdtheme/scripts/sdvalidate.js"></script>
+<!-- 时间区域选择插件 -->
+<script src="/static/plugins/moment-v2.22.1/moment.min.js"></script>
+<script src="/static/plugins/daterangepicker-v3.0.5/daterangepicker.js"></script>
+<!-- 针对当前主题进行简单封装，精简代码 -->
+<script src="/static/sdtheme/scripts/sddaterangepicker.js"></script>
 <script>
-	var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-   $(function () {		
+  var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+  var doAfterSubmit = 0
+   $(function () {	
+        $("#EffTimeRange").sddaterangepicker() //时间选择插件初始化	
+        if(~~($("#Id").val())>0){
+          $("#saveAndgoon").hide()
+        }        
         //验证
         validateInfo();       
     })	
@@ -16,23 +26,42 @@
             rules: {},
             messages: {},
             submitHandler: function (form) {
-				var url ='{{ urlfor "CourseController.Edit"}}'
-				var data = $thisForm.serialize();				
-				$.sdpost(url,data,function(re){
-					if(re.code === 0){
-						parent.layer.msg(re.msg)
-						parent.refresh(re.obj)
-						parent.layer.close(index)
-					}else{
-						parent.layer.alert(re.msg,{icon:2,title:'失败'})
-					}
-				});
-               return false;
+              beforeSubmit()
+              var url ='{{ urlfor "CourseController.Edit"}}'
+              var data = $thisForm.serialize();				
+              $.sdpost(url,data,function(re){
+                if(re.code === 0){
+                  layer.msg(re.msg)
+                  if(doAfterSubmit === 1){
+                    doAfterSubmit = 0
+                  }else{
+                    returnList(re.obj)
+                  }
+                }else{
+                  layer.alert(re.msg,{icon:2,title:'失败'})
+                }
+              });
+              return false;
             }
         });
     }
-
-    function FormSubmit() {
-        $("#thisForm").submit();		
+    function beforeSubmit(){
+      var effTime = $("#EffTimeRange").val().split(" - ")
+      $("#StartTime").val(effTime[0])
+      $("#EndTime").val(effTime[1])
+    }
+    function formSubmit(behavior) {
+      if(behavior && behavior === 1){
+        doAfterSubmit = 1
+      }
+      $("#thisForm").submit();		
+    }
+    function returnList(Id){    
+      var url = '{{ urlfor "CourseController.Index"}}' + '?highlightPk=' + Id;
+      window.location.href = url      
+    }
+    function goBack(){
+      var url = '{{ urlfor "CourseController.Index"}}' + '?highlightPk=' + 0;
+      window.location.href = url   
     }
 </script>

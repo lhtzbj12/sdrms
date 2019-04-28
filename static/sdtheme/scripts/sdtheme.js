@@ -289,6 +289,17 @@ var sdtheme = function () {
             });
         });
     }
+    //获取url中的参数
+    function getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", 'i'); // 匹配目标参数
+      var result = window.location.search.substr(1).match(reg); // 对querystring匹配目标参数
+      if (result != null) {
+        return decodeURIComponent(result[2]);
+      } else {
+        return null;
+      }
+    }
+
     return {
         //
         init:init,
@@ -322,8 +333,10 @@ var sdtheme = function () {
         loadScrollTopFromCookie: loadScrollTopFromCookie,
         //提示错误
         alertXHRError:alertXHRError,
-        //时间区间初始化
-        timeCtrlBeginToEnd:timeCtrlBeginToEnd
+        //时间区间初始化（废弃，请改用sddaterangepicker）
+        timeCtrlBeginToEnd:timeCtrlBeginToEnd,
+        //获取地址里的参数
+        getQueryString:getQueryString
     };
     //控件美化
     function uniform() {

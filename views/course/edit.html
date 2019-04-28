@@ -1,24 +1,68 @@
-<div class="row">
-    <!-- form start -->
-    <form class="form-horizontal" id="thisForm">
-        <input type="hidden" Name="Id" id="Id" value="{{.m.Id}}">
-        <div class="form-group">
-            <label class="col-sm-2 control-label">名称</label>
-            <div class="col-sm-8">
-                <input type="text" name="Name" class="form-control" placeholder="字母汉字" value="{{.m.Name}}"  maxlength="32" required>
-            </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">短名称</label>
-          <div class="col-sm-8">
-              <input type="text" name="ShortName" class="form-control" placeholder="字母汉字" value="{{.m.ShortName}}"  maxlength="8" required>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+      课程管理
+      <small>添加课程</small>
+  </h1>
+  <ol class="breadcrumb">
+      <li>
+          <a href="{{urlfor "HomeController.Index"}}">
+              <i class="fa fa-dashboard"></i> 首页</a>
+      </li>
+      <li class="active">课程管理</li>
+  </ol>
+</section>
+<!-- Main content -->
+<section class="content container-fluid">
+    <!-- 页面内容开始 -->
+    <div class="row">
+      <div class="col-md-8">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+              <h3 class="box-title">课程基本信息</h3>
           </div>
-      </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">顺序</label>
-            <div class="col-sm-8">
-                <input type="text" name="Seq" class="form-control" placeholder="非负整数" value="{{.m.Seq}}" required>
-            </div>
+          <div class="box-body">
+            <!-- form start -->
+            <form class="form-horizontal margin-top-20" id="thisForm">
+                <input type="hidden" Name="Id" id="Id" value="{{.m.Id}}">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">名称</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="Name" class="form-control" placeholder="字母汉字" value="{{.m.Name}}"  maxlength="32" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">短名称</label>
+                  <div class="col-sm-8">
+                      <input type="text" name="ShortName" class="form-control" placeholder="字母汉字" value="{{.m.ShortName}}"  maxlength="8" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">有效期</label>
+                  <div class="col-sm-8">
+                      <input type="text" name="EffTimeRange" id="EffTimeRange" class="form-control" placeholder="" 
+                        value="{{.m.StartTime}} - {{.m.EndTime}}" required>
+                      <input type="hidden" name="StartTime" id="StartTime" >
+                      <input type="hidden" name="EndTime" id="EndTime" >
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">顺序</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="Seq" class="form-control" placeholder="非负整数" value="{{.m.Seq}}" required>
+                    </div>
+                </div>
+            </form>
+            <!-- form end -->
+          </div>
+          <div class="box-footer align-center">
+            <button type="button" class="btn btn-primary" onclick="formSubmit()">保存</button>
+            <button type="button" class="btn btn-success" id="saveAndgoon" onclick="formSubmit(1)">保存并继续添加</button>
+            <button type="button" class="btn btn-default" onclick="goBack()">返回</button>
+          </div>
         </div>
-    </form>
-</div>
+      </div>
+    </div>
+    <!-- 页面内容结束 -->
+  </section>
+  <!-- /.content -->
