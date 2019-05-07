@@ -6,7 +6,7 @@
 <script src="/static/plugins/x-editable/js/bootstrap-editable.min.js"></script>
 <!-- bootstrap-table启用x-editable插件 -->
 <script src="/static/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
-
+<script src="/static/plugins/moment-v2.22.1/moment.min.js"></script>
 <script>
     var $dataGrid = $('#dataGrid');
     var $searchForm = $("#searchForm")
@@ -109,9 +109,10 @@
                 }
             }, {
                 field: 'StartTime',
-                title: '有效期',            
+                title: '有效期',   
+                width: '160px',         
                 formatter: function(value, row, index, field){
-                  return row.StartTime + ' - ' + row.EndTime
+                  return moment(row.StartTime).format('YYYY-MM-DD HH:mm:ss') + ' - ' + moment(row.EndTime).format('YYYY-MM-DD HH:mm:ss') 
                 }
             }, {
                 field: 'Seq',
