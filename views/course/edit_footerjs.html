@@ -58,11 +58,8 @@
       $("#thisForm").submit();		
     }
     function returnList(Id){    
-      var url = '{{ urlfor "CourseController.Index"}}' + '?highlightPk=' + Id;
+      var id = ~~($('#Id').val())
+      var url = '{{ urlfor "CourseController.Index"}}' + '?highlightPk=' + id;
       window.location.href = url      
-    }
-    function goBack(){
-      var url = '{{ urlfor "CourseController.Index"}}' + '?highlightPk=' + 0;
-      window.location.href = url   
-    }
+    }    
 </script>
