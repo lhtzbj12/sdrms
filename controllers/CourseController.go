@@ -107,6 +107,8 @@ func (c *CourseController) Save() {
 		oM.Name = m.Name
 		oM.ShortName = m.ShortName
 		oM.Seq = m.Seq
+		oM.Price = m.Price
+		oM.RealPrice = m.RealPrice
 		if _, err = o.Update(oM); err == nil {
 			c.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {

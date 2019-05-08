@@ -17,7 +17,7 @@
     <!-- 页面内容开始 -->
     <div class="row">
         <div class="col-md-12">           
-            <form id="searchForm" class="searchForm">
+            <form id="searchForm" class="searchForm" onsubmit="return false">
                 <div class="box box-solid collapsed-box">
                     <div class="box-header with-border">                     
                         <input type="text" name="Name" class="form-control pull-left input-wd-md" placeholder="名称">
@@ -25,12 +25,12 @@
                             <button type="button" class="btn btn-warning" id="btnSearch"><i class="fa fa-search"></i> 搜索</button>
                             <button type="button" class="btn btn-default" id="btnClearSearch"><i class="fa fa-eraser"></i> 清除</button>
                         </div>
-						{{if .showMoreQuery }}
+						          {{if .showMoreQuery }}
                         <div class="box-tools pull-right">
                             <button id="searchpanelbtn" type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                                 </button>
                         </div>
-						{{end}}
+						          {{end}}
                         <!-- /.box-tools -->
                     </div>
                     <!-- /.box-header -->

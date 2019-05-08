@@ -65,7 +65,13 @@ var sdtheme = function () {
         }
         return '<label class="label ' + icss + '  label-sm">' + text + '</label>';
     }
-
+    //显示时间，默认格式 YYYY-MM-DD HH:mm:ss 信赖moment插件
+    showDateTime = function (value, format) {
+      if(!format){
+        format = 'YYYY-MM-DD HH:mm:ss'
+      }
+      return moment(value).format(format)
+    }
     //从cookie加载查询条件
     //默认存入cookie的key由formId而，可以使用extKey进一步区分
     //callback用于，加载完数据后，做更多事件，比如处理级联的下拉框
@@ -315,6 +321,8 @@ var sdtheme = function () {
         showyes: showyes,
         //显示枚举
         showenum: showenum,
+        //显示时间
+        showDateTime,
         //保存form里的查询条件
         saveSearchText: saveSearchText,
         //加载form查询条件

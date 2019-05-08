@@ -6,7 +6,6 @@
 <script src="/static/plugins/x-editable/js/bootstrap-editable.min.js"></script>
 <!-- bootstrap-table启用x-editable插件 -->
 <script src="/static/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
-<script src="/static/plugins/moment-v2.22.1/moment.min.js"></script>
 <script>
     var $dataGrid = $('#dataGrid');
     var $searchForm = $("#searchForm")
@@ -108,11 +107,17 @@
                     return { classes: 'ellipsis' };
                 }
             }, {
+                field: 'Price',
+                title: '价格(元)'     
+            }, {
+                field: 'RealPrice',
+                title: '实际价格(元)'
+            }, {
                 field: 'StartTime',
                 title: '有效期',   
                 width: '160px',         
                 formatter: function(value, row, index, field){
-                  return moment(row.StartTime).format('YYYY-MM-DD HH:mm:ss') + ' - ' + moment(row.EndTime).format('YYYY-MM-DD HH:mm:ss') 
+                  return sdtheme.showDateTime(row.StartTime) + ' - ' + sdtheme.showDateTime(row.EndTime)
                 }
             }, {
                 field: 'Seq',
