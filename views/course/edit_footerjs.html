@@ -8,6 +8,10 @@
 <script src="/static/plugins/daterangepicker-v3.0.5/daterangepicker.js"></script>
 <!-- 针对当前主题进行简单封装，精简代码 -->
 <script src="/static/sdtheme/scripts/sddaterangepicker.js"></script>
+<!-- 文件上传插件 -->
+<script src="/static/plugins/ajaxfileupload.js"></script>
+<!-- 图片上传插件 -->
+<script src="/static/plugins/bootstrap-fileinput-jasny/bootstrap-fileinput.js"></script>
 <script>
   var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
   var doAfterSubmit = 0
@@ -18,8 +22,58 @@
           $("#pageSmallTitle").text("编辑课程")
         }        
         //验证
-        validateInfo();       
-    })	
+        validateInfo(); 
+        //图片上传初始化
+        updloadCtrolInit();      
+    })
+    //image upolad init
+    function updloadCtrolInit() {
+      //多个图共用一套上传代码
+      $(".fileinput").on('change.bs.fileinput', function () {
+          var $this = $(this);
+          var fileinput = $("input[type='file']", this);
+          // file 控件的id
+          var inputId = fileinput.attr('id');
+          //获取隐藏用于保存图片地址的input
+          var hiddeninput = $("#" + inputId.replace('input', ''));
+          $.ajaxFileUpload({
+              url: '{{ urlfor "CourseController.UploadImage" }}',
+              secureuri: false,
+              fileElementId: inputId,
+              dataType: 'json',
+              data: { type: 1 }, //用来传file其他的值
+              complete: function () {
+                  //结束后做一次验证
+                  hiddeninput.valid();
+              },
+              success: function (re, status) {
+                  if (re.code === 0) {
+                      hiddeninput.val(re.obj);
+                  }
+                  else {
+                      parent.layer.alert(re.msg, { icon: 2, title: '错误' });
+                      $this.fileinput('clear');
+                      //调用clear方法时不激发事件
+                      hiddeninput.val('');
+                  }
+              },
+              error: function (XHR, status, e) { 
+                  sdtheme.alertXHRError(XHR);                  
+                  $this.fileinput('clear');
+                  //调用clear方法时不激发事件
+                  hiddeninput.val('');
+              }
+          });
+      });
+      //多个图片共用一套上传代码,在上传代码的clear事件里，清空图片地址
+      $(".fileinput").on('clear.bs.fileinput', function () {
+          var inputId = $("input[type='file']", this).attr('id');
+          var hiddeninput = $("#" + inputId.replace('input', ''));
+          hiddeninput.val('');
+          //这里验证
+          //hiddeninput.valid();
+      });
+    }	
     //表单验证及AJAX提交
     function validateInfo() {
         var $thisForm = $('#thisForm');

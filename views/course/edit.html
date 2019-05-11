@@ -70,6 +70,28 @@
                         <input type="text" name="Seq" class="form-control" placeholder="非负整数" value="{{.m.Seq}}" required>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">课程封面</label>
+                    <div class="col-sm-8">
+                      <div class="fileinput {{if .hasImg}}fileinput-exists{{else}}fileinput-new{{end}} display-block" data-provides="fileinput">
+                        <div class="fileinput-new thumbnail">
+                            <img src="/static/sdtheme/img/no-image.png" alt="">
+                        </div>
+                        <div class="fileinput-preview fileinput-exists thumbnail">
+                            <img src="{{.m.Img}}">
+                        </div>
+                        <div>
+                            <span class="btn btn-file">
+                                <span class="fileinput-new"> 选择图片 </span>
+                                <span class="fileinput-exists"> 更换 </span>
+                                <input name="fileImg" id="inputImg" type="file">
+                            </span>
+                            <a href="javascript:;" class="btn btn-danger fileinput-exists" data-dismiss="fileinput"> 移除 </a>
+                        </div>
+                      </div>
+                      <input name="Img" id="Img" type="hidden" value="{{.m.Img}}" required>
+                    </div>
+                </div>
             </form>
             <!-- form end -->
           </div>

@@ -14,6 +14,7 @@ func init() {
 	beego.Router("/course/edit/?:id", &controllers.CourseController{}, "Get,Post:Edit")
 	beego.Router("/course/delete", &controllers.CourseController{}, "Post:Delete")
 	beego.Router("/course/updateseq", &controllers.CourseController{}, "Post:UpdateSeq")
+	beego.Router("/course/uploadimage", &controllers.CourseController{}, "Post:UploadImage")
 
 	//用户角色路由
 	beego.Router("/role/index", &controllers.RoleController{}, "*:Index")

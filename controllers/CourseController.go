@@ -25,7 +25,7 @@ func (c *CourseController) Prepare() {
 	//先执行
 	c.BaseController.Prepare()
 	//如果一个Controller的多数Action都需要权限控制，则将验证放到Prepare
-	c.checkAuthor("DataGrid", "DataList", "UpdateSeq")
+	c.checkAuthor("DataGrid", "DataList", "UpdateSeq", "UploadImage")
 	//如果一个Controller的所有Action都需要登录验证，则将验证放到Prepare
 	//权限控制里会进行登录验证，因此这里不用再作登录验证
 	//c.checkLogin()
@@ -75,6 +75,7 @@ func (c *CourseController) Edit() {
 			c.pageError("数据无效，请刷新后重试")
 		}
 	}
+	c.Data["hasImg"] = len(m.Img) > 0
 	c.Data["m"] = m
 	c.setTpl("course/edit.html", "shared/layout_page.html")
 	c.LayoutSections = make(map[string]string)
@@ -109,6 +110,7 @@ func (c *CourseController) Save() {
 		oM.Seq = m.Seq
 		oM.Price = m.Price
 		oM.RealPrice = m.RealPrice
+		oM.Img = m.Img
 		if _, err = o.Update(oM); err == nil {
 			c.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
@@ -148,5 +150,22 @@ func (c *CourseController) UpdateSeq() {
 		c.jsonResult(enums.JRCodeSucc, "修改成功", oM.Id)
 	} else {
 		c.jsonResult(enums.JRCodeFailed, "修改失败", oM.Id)
+	}
+}
+func (c *CourseController) UploadImage() {
+	//这里type没有用，只是为了演示传值
+	stype, _ := c.GetInt32("type", 0)
+	if stype > 0 {
+		f, h, err := c.GetFile("fileImg")
+		if err != nil {
+			c.jsonResult(enums.JRCodeFailed, "上传失败", "")
+		}
+		defer f.Close()
+		filePath := "static/upload/" + h.Filename
+		// 保存位置在 static/upload, 没有文件夹要先创建
+		c.SaveToFile("fileImg", filePath)
+		c.jsonResult(enums.JRCodeSucc, "上传成功", "/"+filePath)
+	} else {
+		c.jsonResult(enums.JRCodeFailed, "上传失败", "")
 	}
 }
