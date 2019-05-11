@@ -57,7 +57,21 @@
             }
         });
     }
-
+    function resetData(){
+      layer.confirm('初始化将会重置数据库到作者发布时状态，是否继续', 
+        {icon: 3, title:'请确认'}, 
+        function(index){  
+          var url = '{{ urlfor "HomeController.DataReset"}}'          
+          $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {                       
+                layer.alert(re.msg, { icon: 1, title: '成功' })                   
+            } else {
+                layer.alert(re.msg, { icon: 2, title: '失败' })
+              }
+          });
+          layer.close(index);
+        })
+    }
     function FormSubmit() {
         $("#thisForm").submit();
     }

@@ -56,3 +56,11 @@ func (c *HomeController) Logout() {
 	c.SetSession("backenduser", user)
 	c.pageLogin()
 }
+func (c *HomeController) DataReset() {
+	if ok, err := models.DataReset(); ok {
+		c.jsonResult(enums.JRCodeSucc, "初始化成功", "")
+	} else {
+		c.jsonResult(enums.JRCodeFailed, "初始化失败,可能原因:"+err.Error(), "")
+	}
+
+}
