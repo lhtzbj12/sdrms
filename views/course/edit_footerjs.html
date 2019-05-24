@@ -100,6 +100,10 @@
             }
         });
     }
+    function toFixed(ctrl){
+      var val =parseFloat($(ctrl).val())   
+      $(ctrl).val(val.toFixed(2))
+    }
     function beforeSubmit(){
       var effTime = $("#EffTimeRange").val().split(" - ")
       $("#StartTime").val(effTime[0])

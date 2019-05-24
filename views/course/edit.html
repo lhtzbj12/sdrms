@@ -51,7 +51,7 @@
                     <div class="col-sm-8">
                       <div class="input-group">
                         <div class="input-group-addon">¥</div>
-                        <input type="text" name="Price" class="form-control" placeholder="数字，最多两位小数" value="{{.m.Price}}" required>                       
+                        <input type="text" name="Price" class="form-control" placeholder="数字，最多两位小数" value="{{.m.Price}}" max="999999" onchange="toFixed(this)" required>                       
                       </div>                        
                     </div>
                 </div>
@@ -60,14 +60,14 @@
                     <div class="col-sm-8">
                       <div class="input-group">
                         <div class="input-group-addon">¥</div>
-                        <input type="text" name="RealPrice" class="form-control" placeholder="数字，最多两位小数" value="{{.m.RealPrice}}" required>                          
+                        <input type="text" name="RealPrice" class="form-control" placeholder="数字，最多两位小数" value="{{.m.RealPrice}}" max="999999" onchange="toFixed(this)" required>                          
                       </div>                         
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">顺序</label>
                     <div class="col-sm-8">
-                        <input type="text" name="Seq" class="form-control" placeholder="非负整数" value="{{.m.Seq}}" required>
+                        <input type="text" name="Seq" class="form-control" placeholder="非负整数" value="{{.m.Seq}}" max="999999" maxlength="6" required>
                     </div>
                 </div>
                 <div class="form-group">
