@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * 用于当前主题通过的方法
  * Created by lihaitao on 2017-7-10.
  */
@@ -29,15 +29,15 @@ var sdtheme = function () {
         return '<span title="' + str + '">' + showstr(str, replace) + '</span>';
     }
     showenable = function (val) {
-        if (val === 1 || val === "1") {
-            return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 启用</label>';
-        } else if (val === 0 || val === "0") {
-            return '<label class="label label-danger label-sm"><i class="fa fa-ban"></i> 禁用</label>';
-        } else if (val === -1 || val === "-1")
-            return '<label class="label label-info label-sm"><i class="fa fa-trash"></i> 删除</label>';
-        else {
-            return "";
-        }
+      if (val === 1 || val === "1") {
+          return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 启用</label>';
+      } else if (val === 0 || val === "0") {
+          return '<label class="label label-danger label-sm"><i class="fa fa-ban"></i> 禁用</label>';
+      } else if (val === -1 || val === "-1")
+          return '<label class="label label-info label-sm"><i class="fa fa-trash"></i> 删除</label>';
+      else {
+          return "";
+      }
     }
     showyes = function (val) {
         if (val === 1 || val === "1" || val === true) {
@@ -49,21 +49,21 @@ var sdtheme = function () {
         }
     }
     showenum = function (value, texts, css, icon) {
-        var index = 0, text = "", icss = 'label-default';
-        if (css === null || typeof (css) === 'undefined') {
-            css = ['label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger', 'label-default'];
-        }
-        var item = $(texts).each(function (i, e) {
-            if (e.Value === value) {
-                index = i;
-                text = e.Text;
-                return false;
-            }
-        });
-        if (index <= css.length) {
-            icss = css[index];
-        }
-        return '<label class="label ' + icss + '  label-sm">' + text + '</label>';
+      var index = 0, text = "", icss = 'label-default';
+      if (css === null || typeof (css) === 'undefined') {
+          css = ['label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger', 'label-default'];
+      }
+      var item = $(texts).each(function (i, e) {
+          if (e.Value === value) {
+              index = i;
+              text = e.Text;
+              return false;
+          }
+      });
+      if (index <= css.length) {
+          icss = css[index];
+      }
+      return '<label class="label ' + icss + '  label-sm">' + text + '</label>';
     }
     //显示时间，默认格式 YYYY-MM-DD HH:mm:ss 信赖moment插件
     showDateTime = function (value, format) {
@@ -120,8 +120,8 @@ var sdtheme = function () {
         //将查询表单的值存在cookie
         $.cookie('formmaitain_' + formId + extKey, decodeURIComponent($("#" + formId).serialize(), true), { expires: 1 });
     }
-     //treetable
-     function saveExpandStatus(treeGridId, extKey) {
+    //treetable
+    function saveExpandStatus(treeGridId, extKey) {
         if(!extKey){
             extKey = ''
         }
@@ -189,6 +189,29 @@ var sdtheme = function () {
         var $btn = $('#' + btnid);
         if ($btn.length > 0) {
             var $icon = $('i',$btn)
+
+            var $box_header = $btn.closest('.box-header')
+            var $box_body = $box_header.next('.box-body')
+            var hasChildren = $box_body.children().length > 0
+            //如果 portlet-body 里没有控件，即不需要展开，则直接pass
+            if (!hasChildren) {
+              $btn.hide()
+              return;
+            } else {
+              $btn.show()
+            }
+            // 当前变化时，做一些事情
+            var doWhenChange = function (css) {
+                if (!hasChildren) {
+                  return
+                }
+                // 如果是展开状态
+                if (css === 'fa-minus') {
+                    $box_header.find('.searchbtns').appendTo($box_body)
+                } else {
+                    $box_header.children('.box-tools').before($box_body.find('.searchbtns'))
+                }
+            }
             //在点击事件里保存状态到cookie
             $btn.off('click').on('click', function () {
                 console.log('click')
@@ -197,6 +220,7 @@ var sdtheme = function () {
                 if ($icon.hasClass('fa-plus')) {
                     css = 'fa-minus';
                 }
+                doWhenChange(css)
                 $.cookie('SearchPanelStatus' + btnid + extKey, css, { expires: 1 });
             });
             //页面加载时，加载状态
@@ -207,6 +231,7 @@ var sdtheme = function () {
                     $btn.closest('div.box').removeClass('collapsed-box')
                     $btn.closest('div.box-header').next().show()
                 }
+                doWhenChange(css)
             }
             if(!hidetips || hidetips===false){
                 //只要面板处于关闭
@@ -305,7 +330,33 @@ var sdtheme = function () {
         return null;
       }
     }
-
+    ///检查cookie中存在的 bootstrapTable PageNumber 是否越界
+    function dataGridPageCheck(ctrl, dataGridKey, callback) {
+        // 检查pageNnumber越界
+        var cookiePageNumber = ~~($.cookie(dataGridKey + '.bs.table.pageNumber'))
+        // 如果是0表示不可用
+        if (cookiePageNumber === 0) {
+            return
+        }
+        var options = $(ctrl).bootstrapTable('getOptions')
+        if ((cookiePageNumber > options.totalPages ) && callback) {
+            callback(options.totalPages);
+        }
+    }
+    ///高亮显示 bootstrapTable 中的行
+    function highlightRows(ctrl, pks) {
+        if (highlightPk !== null && typeof highlightPk !== 'undefined') {
+          var pks = [];
+          if (typeof highlightPk === 'string' || typeof highlightPk === 'number') {
+            pks.push(highlightPk);
+          } else if (typeof highlightPk === 'object') {
+            pks = highlightPk
+          }
+          $.each(pks, function (e, i) {
+            highlight($(ctrl).find('tbody tr[data-pk="' + i + '"]'));
+          });
+        }
+    }
     return {
         //
         init:init,
@@ -344,7 +395,11 @@ var sdtheme = function () {
         //时间区间初始化（废弃，请改用sddaterangepicker）
         timeCtrlBeginToEnd:timeCtrlBeginToEnd,
         //获取地址里的参数
-        getQueryString:getQueryString
+        getQueryString:getQueryString,
+        //检查cookie中存在的 bootstrapTable PageNumber 是否越界
+        dataGridPageCheck: dataGridPageCheck,
+        //高亮显示 bootstrapTable 中的行
+        highlightRows: highlightRows
     };
     //控件美化
     function uniform() {

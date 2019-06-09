@@ -22,27 +22,26 @@
                     <div class="box-header with-border">                     
                         <input type="text" name="UserName" class="form-control pull-left input-wd-md" placeholder="用户名">
                         <input type="text" name="RealName" class="form-control pull-left input-wd-md" placeholder="姓名">
-                        <div class="btn-group">
+                        <div class="btn-group searchbtns">
                             <button type="button" class="btn btn-warning" id="btnSearch"><i class="fa fa-search"></i> 搜索</button>
                             <button type="button" class="btn btn-default" id="btnClearSearch"><i class="fa fa-eraser"></i> 清除</button>
-                        </div>
-						{{if .showMoreQuery }}
+                        </div>						
                         <div class="box-tools pull-right">
                             <button id="searchpanelbtn" type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                                 </button>
-                        </div>
-						{{end}}
+                        </div>					
                         <!-- /.box-tools -->
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body" style="display: none;">
-                        <input type="text" name="Mobile" class="form-control pull-left input-wd-md" placeholder="手机号">
-                        <select name="Status" class="form-control bs-select" data-width="100px">
-                            <option value="">- 全部 -</option>
-                            <option value="-1">锁定</option>
-                            <option value="0">禁用</option>
-                            <option value="1">启用</option>
-                        </select>
+                      <!-- 这里放更多的查询条件，当 box-body 里出更多查询条件时，右侧会出现展开/收缩的按钮-->
+                      <input type="text" name="Mobile" class="form-control pull-left input-wd-md" placeholder="手机号">
+                      <select name="Status" class="form-control bs-select" data-width="100px">
+                          <option value="">- 全部 -</option>
+                          <option value="-1">锁定</option>
+                          <option value="0">禁用</option>
+                          <option value="1">启用</option>
+                      </select>
                     </div>
                     <!-- /.box-body -->
                 </div>

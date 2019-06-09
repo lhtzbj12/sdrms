@@ -31,8 +31,6 @@ func (c *RoleController) Prepare() {
 
 //Index 角色管理首页
 func (c *RoleController) Index() {
-	//是否显示更多查询条件的按钮
-	c.Data["showMoreQuery"] = false
 	//将页面左边菜单的某项激活
 	c.Data["activeSidebarUrl"] = c.URLFor(c.controllerName + "." + c.actionName)
 	c.setTpl()

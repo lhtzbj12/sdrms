@@ -115,8 +115,10 @@
       }
       $("#thisForm").submit();		
     }
-    function returnList(Id){    
-      var id = ~~($('#Id').val())
+    function returnList(id){  
+      if(!id){
+        id = ~~($('#Id').val())
+      }     
       var url = '{{ urlfor "CourseController.Index"}}' + '?highlightPk=' + id;
       window.location.href = url      
     }    

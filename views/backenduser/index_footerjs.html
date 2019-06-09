@@ -6,7 +6,7 @@
     var $dataGrid = $('#dataGrid');
     var $searchForm = $("#searchForm")
     //高亮显示id
-    var highlightPk = 99;
+    var highlightPk = null;
     //初始化加载
     $(function () {
         pageInit();
@@ -30,9 +30,8 @@
         });
         //绑定加载成功的事件，成功后高亮显示当前项
         $dataGrid.on('load-success.bs.table', function () {
-            if (highlightPk !== null && typeof highlightPk !== 'undefined') {
-                sdtheme.highlight($dataGrid.find('tbody tr[data-pk="' + highlightPk + '"]'));
-            }
+            //高亮显示行
+            sdtheme.highlightRows($dataGrid, highlightPk)
             //高亮显示一次后失效
             highlightPk = null;
         });
