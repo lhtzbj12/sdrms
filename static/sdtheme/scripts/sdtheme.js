@@ -344,7 +344,7 @@ var sdtheme = function () {
         }
     }
     ///高亮显示 bootstrapTable 中的行
-    function highlightRows(ctrl, pks) {
+    function highlightRows(ctrl, highlightPk) {
         if (highlightPk !== null && typeof highlightPk !== 'undefined') {
           var pks = [];
           if (typeof highlightPk === 'string' || typeof highlightPk === 'number') {

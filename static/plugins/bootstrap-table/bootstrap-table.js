@@ -320,6 +320,7 @@
         paginationNextText: '&rsaquo;',
         paginationShowPageGo: true,//20170812 lht 扩展select跳转
         paginationUseBSSelect:false,//20170812 lht 扩展select跳转 启用BoostrapSelect
+        customOption:{},//20190613 lht 自定义配置
         search: false,
         searchOnEnterKey: false,
         strictSearch: false,
@@ -822,7 +823,9 @@
 
                 if (column.checkbox) {
                     if (!that.options.singleSelect && that.options.checkboxHeader) {
-                        text = '<input name="btSelectAll" type="checkbox" />';
+                        //text = '<input name="btSelectAll" type="checkbox" />';
+                        //20170813 lht 美化checkbox
+                        text = '<label class="mt-checkbox mt-checkbox-outline" style=\'padding-left: 20px\'><input name="btSelectAll" type="checkbox" /><span style=\'top: -14px\'></span></label>';
                     }
                     that.header.stateField = column.field;
                 }
@@ -1777,19 +1780,23 @@
             if (column.checkbox || column.radio) {
                 type = column.checkbox ? 'checkbox' : type;
                 type = column.radio ? 'radio' : type;
-
+                //20170813 lht 美化 checkbox radio
+                var str1 = '<label class="mt-'+ type +' mt-checkbox-outline" style=\'padding-left: 20px\'>';
+                var str2 = '<span style=\'top: -13px\'></span></label>';
                 text = [sprintf(that.options.cardView ?
-                    '<div class="card-view %s">' : '<td class="bs-checkbox %s">', column['class'] || ''),
+                        '<div class="card-view %s">' : '<td class="bs-checkbox %s">', column['class'] || ''),
+                    str1,
                     '<input' +
                     sprintf(' data-index="%s"', i) +
                     sprintf(' name="%s"', that.options.selectItemName) +
                     sprintf(' type="%s"', type) +
                     sprintf(' value="%s"', item[that.options.idField]) +
                     sprintf(' checked="%s"', value === true ||
-                    (value_ || value && value.checked) ? 'checked' : undefined) +
+                        (value_ || value && value.checked) ? 'checked' : undefined) +
                     sprintf(' disabled="%s"', !column.checkboxEnabled ||
-                    (value && value.disabled) ? 'disabled' : undefined) +
+                        (value && value.disabled) ? 'disabled' : undefined) +
                     ' />',
+                    str2,
                     that.header.formatters[j] && typeof value === 'string' ? value : '',
                     that.options.cardView ? '</div>' : '</td>'
                 ].join('');
@@ -2058,7 +2065,7 @@
                 res = calculateObjectValue(that.options, that.options.responseHandler, [res], res);
 
                 that.load(res);
-                that.trigger('load-success', res);
+                that.trigger('load-success', res, that.options); //20190614 lht
                 if (!silent) that.$tableLoading.hide();
             },
             error: function (res) {
@@ -2830,6 +2837,10 @@
         if (params && params.pageSize) {
             this.options.pageSize = params.pageSize;
         }
+        //20190613 lht 自定义配置
+        if (params && params.customOption){
+          this.options.customOption = $.extend(true, this.options.customOption, params.customOption);
+        }
         this.initServer(params && params.silent,
             params && params.query, params && params.url);
         this.trigger('refresh', params);
@@ -3038,6 +3049,10 @@
         this.initPagination();
         this.initBody();
     };
+    //20190613 lht 自定义配置
+    BootstrapTable.prototype.extendCustomOption = function (value) {
+        this.options.customOption = $.extend(true, this.options.customOption, value);
+    };
 
     // BOOTSTRAP TABLE PLUGIN DEFINITION
     // =======================
@@ -3068,7 +3083,8 @@
         'refreshOptions',
         'resetSearch',
         'expandRow', 'collapseRow', 'expandAllRows', 'collapseAllRows',
-        'updateFormatText'
+        'updateFormatText',
+        'extendCustomOption'//20190613 lht 自定义配置
     ];
 
     $.fn.bootstrapTable = function (option) {

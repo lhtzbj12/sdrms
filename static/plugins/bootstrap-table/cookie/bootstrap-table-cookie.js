@@ -240,7 +240,8 @@
         _onPageLast = BootstrapTable.prototype.onPageLast,
         _toggleColumn = BootstrapTable.prototype.toggleColumn,
         _selectPage = BootstrapTable.prototype.selectPage,
-        _onSearch = BootstrapTable.prototype.onSearch;
+        _onSearch = BootstrapTable.prototype.onSearch,
+        _refresh = BootstrapTable.prototype.refresh;
 
     BootstrapTable.prototype.init = function () {
         var timeoutId = 0;
@@ -274,6 +275,19 @@
                 setCookie(that, cookieIds.filterControl, JSON.stringify(that.options.filterControls));
             }).on('post-body.bs.table', initCookieFilters(that));
         }
+        //20190614 lht fix bug that pageNumber in cookie out of range
+        var tempThat = this;
+        this.$el.on('load-success.bs.table', function(e,data){
+          // 检查pageNnumber越界
+          var cookiePageNumber = ~~(getCookie(tempThat, tempThat.options.cookieIdTable, cookieIds.pageNumber))
+          // 如果是0表示不可用
+          if (cookiePageNumber === 0) {
+            return
+          }
+          if ((cookiePageNumber > tempThat.options.totalPages )) {
+            tempThat.onPageLast()
+          }
+        })
         _init.apply(this, Array.prototype.slice.apply(arguments));
     };
 
@@ -442,4 +456,11 @@
 
         deleteCookie(this, this.options.cookieIdTable, cookieIds[cookieName]);
     };
+    //20190613 lht fix :set cookie wheen refresh
+    BootstrapTable.prototype.refresh = function () {
+        _refresh.apply(this, Array.prototype.slice.apply(arguments));
+        setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
+        setCookie(this, cookieIds.pageList, this.options.pageSize);
+    };
+
 })(jQuery);
