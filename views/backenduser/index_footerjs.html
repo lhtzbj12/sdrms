@@ -4,9 +4,7 @@
 <script src="/static/plugins/bootstrap-table/cookie/bootstrap-table-cookie.js"></script>
 <script>
     var $dataGrid = $('#dataGrid');
-    var $searchForm = $("#searchForm")
-    //高亮显示id
-    var highlightPk = null;
+    var $searchForm = $("#searchForm")    
     //初始化加载
     $(function () {
         pageInit();
@@ -17,7 +15,7 @@
         //从cookie加载查询条件，传入参数为form id
         sdtheme.loadSearchText('searchForm');
         //初始化表格
-        dataGridInit();
+        dataGridInit($dataGrid);
         //搜索
         $("#btnSearch").on("click", function (e) {
             refreshToFirstPage();
@@ -27,37 +25,44 @@
             $('select', $searchForm).selectpicker('val', '');
             $('input', $searchForm).val('');
             refreshToFirstPage();
-        });
-        //绑定加载成功的事件，成功后高亮显示当前项
-        $dataGrid.on('load-success.bs.table', function () {
-            //高亮显示行
-            sdtheme.highlightRows($dataGrid, highlightPk)
-            //高亮显示一次后失效
-            highlightPk = null;
-        });
+        });        
         //保持搜索条件面板状态
         sdtheme.searchPanelStatusInit('searchpanelbtn');
     };
 
     //刷新当前页
     function refresh(pk) {
-        $dataGrid.bootstrapTable('refresh');
-        highlightPk = pk;
+      // 给bootraptable 扩展的配置 customOption ，用于保存自定义的配置
+      // 比如：用于高亮显示的 主键pk 
+      $dataGrid.bootstrapTable('refresh', { customOption: { 'hlpk': pk } });
     }
 
-    //刷新并跳转至第一页
-    function refreshToFirstPage() {
-        //表格刷新时，保存查询条件到cookie
-        sdtheme.saveSearchText('searchForm');
-        //刷新并跳转至第1页
-        $dataGrid.bootstrapTable('refresh', {pageNumber: 1});
-        //同时要更新cookie里保存当前页码
-        $.cookie('dataGrid.bs.table.pageNumber', 1, {expires: 1});
-    }
+    //刷新并跳转至第n页
+    function refreshToFirstPage(pageNumer) {
+      pageNumer = ~~(pageNumer)
+      if (pageNumer === 0) {
+        pageNumer = 1
+      }
+      //表格刷新时，保存查询条件到cookie
+      sdtheme.saveSearchText('SearchForm');
+      //刷新并跳转至第 pageNumer 页
+      $dataGrid.bootstrapTable('refresh', { pageNumber: pageNumer });
+    }    
 
     //bootstrap table data init
-    function dataGridInit() {
-        $dataGrid.bootstrapTable({
+    function dataGridInit($ctrl) {
+        if (!$ctrl) {
+          $ctrl = $("#dataGrid")
+        }
+        //绑定加载成功的事件
+        // 修改了bootstrap-table源码，load-success.bs.table回调会传递options，方便使用
+        $ctrl.on('load-success.bs.table', function (e, data, options) {
+          //高亮显示行
+          sdtheme.highlightRows(this, options.customOption.hlpk)
+          //高亮显示一次后失效
+          $(this).bootstrapTable('extendCustomOption', { hlpk: null })
+        });
+        $ctrl.bootstrapTable({
             url: '{{ urlfor "BackendUserController.DataGrid"}}',
             method: 'post',
             sidePagination: 'server', //服务器端用 server
@@ -84,6 +89,9 @@
             undefinedText: '',
             sortName: 'Id',
             sortOrder: 'desc',
+            customOption: {
+              hlpk: sdtheme.getQueryString("hlpk")
+            },
             rowAttributes: function (row, index) {
                 return {'data-pk': row.Id}
             },
@@ -126,35 +134,19 @@
                     return ret.join('');
                 }
             }],
-            onLoadSuccess: function (data) {
-                layer.closeAll('loading');
-                //
-                //CheboxUniform()
-            },
-            onSort: function (name, order) {
-                //alert('name:' + name + " order:" + order);
-            },
-            onPageChange: function () {
-                //layer.load();
-            },
+            onLoadSuccess: function (data) {                
+            },            
             onCheckAll: function (rows) {
-                //禁用删除需要勾选才能用的按钮
-                $(".table-btn-check-enable").removeAttr('disabled');
+              $(".table-btn-check-enable").prop('disabled', false);
             },
             onCheck: function (rows) {
-                //禁用删除需要勾选才能用的按钮
-                $(".table-btn-check-enable").removeAttr('disabled');
+              $(".table-btn-check-enable").prop('disabled', false);
             },
             onUncheck: function (rows) {
-                //禁用删除需要勾选才能用的按钮
-                if ($("#dataGrid").bootstrapTable("getSelections").length === 0) {
-                    $(".table-btn-check-enable").attr('disabled', 'disabled');
-                }
-            }, onUncheckAll: function () {
-                //禁用删除需要勾选才能用的按钮
-                if ($("#dataGrid").bootstrapTable("getSelections").length === 0) {
-                    $(".table-btn-check-enable").attr('disabled', 'disabled');
-                }
+              $(".table-btn-check-enable").prop('disabled', !$ctrl.bootstrapTable("getSelections").length)
+            },
+            onUncheckAll: function () {
+              $(".table-btn-check-enable").prop('disabled', !$ctrl.bootstrapTable("getSelections").length)
             },
             onLoadError: function (status) {
                 layer.alert('获取数据失败,错误代码：' + status);
