@@ -113,7 +113,9 @@
             }, {
                 field: 'Name',
                 title: '名称',            
-                formatter: formatterWapBySpan,
+                formatter: function(value,row,index){
+                  return sdtheme.showlongstr(value)
+                },
                 cellStyle: function (value, row, index, field) {
                     return { classes: 'ellipsis' };
                 }
@@ -171,14 +173,7 @@
               layer.alert('获取数据失败,错误代码：' + status);
             }
         });
-    } 
-    ///用一个带有title值的span将值包裹起来
-    function formatterWapBySpan(value, row, index) {
-        if (value !== null) {
-            return '<span title="' + value + '">' + value + '</span>';
-        }
-        return "";
-    } 
+    }    
 
     function EditFun(Id) {
         var title = '添加课程';
