@@ -67,5 +67,6 @@ bee run
  go get github.com/gomodule/redigo/redis
  ```
 # 更新日志
+- 2019-06-15 修复bootstrap-cookie插件bug,扩展bootstrap-table插件,精简业务端代码
 - 2019-05-12 更新主题js，支持自动判断是否需要展开更多查询条件
 - 2019-05-12 新增课程管理模块，新增日期区间插件，新增初始化功能
