@@ -318,8 +318,7 @@
         paginationDetailHAlign: 'left', //right, left
         paginationPreText: '&lsaquo;',
         paginationNextText: '&rsaquo;',
-        paginationShowPageGo: true,//20170812 lht 扩展select跳转
-        paginationUseBSSelect:false,//20170812 lht 扩展select跳转 启用BoostrapSelect
+        paginationShowPageGo: true,//20190619 lht 扩展input跳转
         customOption:{},//20190613 lht 自定义配置
         search: false,
         searchOnEnterKey: false,
@@ -1315,7 +1314,7 @@
             $first, $pre,
             $next, $last,
             $number,
-            $pagego,//20170812 lht 扩展select跳转
+            $pagego,//20190619 lht 扩展input跳转
             data = this.getData(),
             pageList = this.options.pageList;
 
@@ -1487,32 +1486,16 @@
                 }
             }
             html.push('<li class="page-next"><a href="#">' + this.options.paginationNextText + '</a></li>');
-            //20170812 lht 扩展select跳转
+            //20190619 lht 扩展input跳转
             if(this.totalPages>= 10 && this.options.paginationShowPageGo){
-                html.push('<li class="bootstrap-table-page-go">',
-                          '<select>');
-                for(var goi=1;goi<=this.totalPages;goi++){
-                    html.push('<option value="'+goi+'"');
-                    if(goi === this.options.pageNumber){
-                        html.push(' selected');
-                    }
-                    html.push('>'+goi+'</option>');
-                }
-                html.push('</select>','</li>');
+                html.push('<li class="bootstrap-table-page-go">');
+                html.push('<input type="text" style="">')
+                html.push('</li>');
             }
             html.push('</ul>',
                      '</div>');
         }
         this.$pagination.html(html.join(''));
-        //20170812 lht 扩展select跳转 启用BoostrapSelect
-        if(this.options.paginationUseBSSelect){
-            var select = $('.bootstrap-table-page-go');
-            if(select.length>0){
-                //计算合适的宽度
-                var width = this.totalPages.toString().length * 10 + 40;
-                $('select',select).selectpicker({width:width+"px"});
-            }
-        }
 
         if (!this.options.onlyInfoPagination) {
             $pageList = this.$pagination.find('.page-list a');
@@ -1521,7 +1504,7 @@
             $next = this.$pagination.find('.page-next');
             $last = this.$pagination.find('.page-last');
             $number = this.$pagination.find('.page-number');
-            //20170812 lht 扩展select跳转
+            //20190619 lht 扩展input跳转
             $pagego = this.$pagination.find('.bootstrap-table-page-go');
 
             if (this.options.smartDisplay) {
@@ -1554,8 +1537,8 @@
             $next.off('click').on('click', $.proxy(this.onPageNext, this));
             $last.off('click').on('click', $.proxy(this.onPageLast, this));
             $number.off('click').on('click', $.proxy(this.onPageNumber, this));
-            //20170812 lht 扩展select跳转
-            $pagego.find('select').off('change').on('change', $.proxy(this.onPageGo, this));
+            //20190619 lht 扩展input跳转
+            $pagego.find('input').off('change').on('change', $.proxy(this.onPageGo, this));
         }
     };
 
@@ -1631,12 +1614,14 @@
         this.updatePagination(event);
         return false;
     };
-    //20170812 lht 扩展select跳转
+    //20190619 lht 扩展input跳转
     BootstrapTable.prototype.onPageGo = function (event) {
-        if (this.options.pageNumber === +$(event.currentTarget).val()) {
+        var value = ~~($(event.currentTarget).val())
+        if (this.options.pageNumber === value || value > this.totalPages || value < 1) {
+            $(event.currentTarget).val('')
             return;
         }
-        this.options.pageNumber = +$(event.currentTarget).val();
+        this.options.pageNumber = value;
         this.updatePagination(event);
         return false;
     };

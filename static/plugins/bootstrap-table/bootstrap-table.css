@@ -312,11 +312,20 @@ div.fixed-table-scroll-outer {
     display: block;
     clear: both;
 }
-/*  20170812 lht 扩展select跳转 */
-.bootstrap-table .bootstrap-table-page-go select{
-    height: 34px;
-    border-left: none;
-    border-color: #dddddd;
-    padding:0 5px;
+/* //20190619 lht 扩展input跳转 */
+.bootstrap-table .bootstrap-table-page-go input{
+    padding:6px 5px;
+    line-height: 1.428571429;
     color: #337ab7;
+    text-align:center;
+    border: 1px solid #ddd;
+    border-left: none;
+    max-width: 60px;
+    outline:none;
+}
+.bootstrap-table .pagination-lg .bootstrap-table-page-go input{
+    font-size: 18px;
+}
+.bootstrap-table .pagination-sm .bootstrap-table-page-go input{
+    font-size: 12px;
 }
